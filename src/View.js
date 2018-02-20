@@ -39,10 +39,9 @@ class View { // eslint-disable-line no-unused-vars
   static add (newText) {
     // NOTES FOR NEXT TIME: Ask mike about programming standards
     // NOTES FOR NEXT TIME: Re:usage of '<br>' versus calling this.NEWLINE()
-    let outString = '' // initalize outString
+    let outString = '' // initialize outString
     // first, check if the passed value is a list
     if (Array.isArray(newText)) {
-      let outString = ''
       // the passed value is an array.
       for (let aLine of newText) {
         outString += '<br>' + aLine // add method includes break characters on the start of each line.
@@ -67,8 +66,7 @@ class View { // eslint-disable-line no-unused-vars
   }
 
   static renderElection (anElection) {
-    this.add(anElection)
-    this.out(this.NEWLINE())
+    this.add(anElection + this.NEWLINE())
     for (let aParty of anElection.allMyParliamentParties) {
       this.renderParty(aParty)
     }
@@ -80,11 +78,18 @@ class View { // eslint-disable-line no-unused-vars
     let electorates = aCountry.compareElectorateMPParties(year1, year2)
     let unchangedElectorates = electorates[0]
     let changedElectorates = electorates[1]
-    this.add(`Unchanged Electorates:`)
+    let renderList = []
+    renderList.push(`Unchanged Electorates:`)
     for (let anElectorate of unchangedElectorates) {
-      this.add(`${anElectorate[0]}: ${this.NEWLINE()}${this.TAB()}${anElectorate[1]}`)
+      renderList.push(`${anElectorate[0]}: ${this.NEWLINE()}${this.TAB()}${anElectorate[1]}`)
     }
-    this.add(`${this.NEWLINE()}Changed Electorates:`)
+    if(DEBUG) {
+      console.log(renderList)
+    }
+    this.add(renderList)
+    
+    renderList = []
+    renderList.push(`${this.NEWLINE()}Changed Electorates:`)
     for (let anElectorate of changedElectorates) {
       let outValues = []
       for (let anIndex of anElectorate) {
@@ -96,14 +101,20 @@ class View { // eslint-disable-line no-unused-vars
             outValues.push(anIndex)
         }
       }
-      this.add(`${outValues[0]}: ${this.NEWLINE()}${this.TAB()}${outValues[1]} --> ${outValues[2]}`)
+      renderList.push(`${outValues[0]}: ${this.NEWLINE()}${this.TAB()}${outValues[1]} --> ${outValues[2]}`)
     }
+    if (DEBUG) {
+      console.log(renderList)
+    }
+    
+    this.add(renderList)
   }
 
   static renderElectoratePartyVoteComparisons (mapVoteData) {
     // outputs the comparisons between the first year's party vote (by electorate) to the second year's one.
     // programmer's note: This code is very processor intensive, the view.out calls have a high algorythmic complexity. Possibly investigate storing the values as an out list and pushing them to the view.out in one call.
-    this.add(`${this.NEWLINE()}Party Vote Changes, By Electorate:${this.NEWLINE()}`)
+    let renderList = []
+    renderList.push(`${this.NEWLINE()}Party Vote Changes, By Electorate:${this.NEWLINE()}`)
     let nameValues = ['Labor', 'National', 'Other'] // to avoid hard coding in loop.
     for (let anElectorate of mapVoteData.keys()) {
       if (DEBUG) {
@@ -111,21 +122,22 @@ class View { // eslint-disable-line no-unused-vars
           console.log('Pause for debugging')
         }
       }
-      this.add(`${anElectorate}:`)
+      renderList.push(`${anElectorate}:`)
       let thisElectorateData = mapVoteData.get(anElectorate)
       let partyIndex = 0
       while (partyIndex < 3) { // loop to display UP // DOWN // STATIC depending on if absolute vote totals increased, decreased, or stayed the same.
         if (thisElectorateData[2][partyIndex] > 0) {
-          this.add(`${this.TAB()}${nameValues[partyIndex]}: UP`)
+          renderList.push(`${this.TAB()}${nameValues[partyIndex]}: UP`)
         } else if (thisElectorateData[2][partyIndex] < 0) {
-          this.add(`${this.TAB()}${nameValues[partyIndex]}: DOWN`)
+          renderList.push(`${this.TAB()}${nameValues[partyIndex]}: DOWN`)
         } else {
-          this.add(`${this.TAB()}${nameValues[partyIndex]}: STATIC`)
+          renderList.push(`${this.TAB()}${nameValues[partyIndex]}: STATIC`)
         }
         partyIndex += 1
       }
     }
-    this.out(this.NEWLINE())
+    renderList.push(this.NEWLINE())
+    this.add(renderList)
   }
 
   static renderCountry (aCountry, year1, year2) {
