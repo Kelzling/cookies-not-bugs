@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 31/10/2017
+corrected to conform to standardJS 9/11/2017
 */
 
 class Electorate { // eslint-disable-line no-unused-vars

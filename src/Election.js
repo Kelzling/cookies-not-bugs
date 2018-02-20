@@ -1,10 +1,10 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 31/10/2017
+corrected to conform to standardJS 9/11/2017
 */
 
-/* global Party, View, Electorate */
+/* global Party, View, Electorate DEBUG */
 
 class Election { // eslint-disable-line no-unused-vars
 // Class for handling elections
@@ -85,19 +85,18 @@ class Election { // eslint-disable-line no-unused-vars
         this.allMyParliamentParties.push(aParty)
       }
     }
-    
+
     // for mike
-    let totalVotesInParliament  = 0
+    let totalVotesInParliament = 0
     for (let party of this.allMyParliamentParties) {
       totalVotesInParliament += party.totalVotes
     }
-    
+
     console.log("For Mike's Marking:")
     console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`)
-    
+
     // bit for mike ends
-    
-    
+
     return this.allMyParliamentParties
   }
 
@@ -154,7 +153,7 @@ class Election { // eslint-disable-line no-unused-vars
       if (DEBUG) { // checks global toggle to see if debugging mode is active
         console.log(aSeatCount)
       }
-      
+
       let aParty = this.findParty(aSeatCount[0])
       if (aParty.getElectorateSeats() > aSeatCount[1]) {
         aSeatCount[1] += aParty.getElectorateSeats() - aSeatCount[1]

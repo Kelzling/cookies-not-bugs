@@ -1,8 +1,10 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 31/10/2017
+corrected to conform to standardJS 9/11/2017
 */
+
+/* global Electorate View */
 
 class Candidate { // eslint-disable-line no-unused-vars
 // class to store information about a candidate
@@ -41,11 +43,10 @@ class Candidate { // eslint-disable-line no-unused-vars
     // returns a boolean, true if the candidate is an MP, list or electorate, and false otherwise
     return (this.myElectorate instanceof Electorate || this.isListMP) // checks if myElectorate is actually an electorate.
   }
-  
-  
+
   toString () {
     let returnStr = ''
-    
+
     returnStr += this.name + View.DISPBREAK() // add Candidate name
     returnStr += this.myParty + View.DISPBREAK() // add candidate party
     if (this.listPosition) { // checks if the candidate is on the party list
@@ -53,14 +54,12 @@ class Candidate { // eslint-disable-line no-unused-vars
     }
     if (this.myElectorate instanceof Electorate) { // checks if the candidate is an electorate MP
       returnStr += View.ENDLINE() + View.TAB() + 'Electorate MP for: ' + this.myElectorate + View.ENDLINE()
-    }
-    else if (this.isListMP) { // checks if the candidate is a List MP
+    } else if (this.isListMP) { // checks if the candidate is a List MP
       returnStr += View.ENDLINE() + View.TAB() + 'List MP' + View.ENDLINE()
-    }
-    else { // if the candidate is not an MP
+    } else { // if the candidate is not an MP
       returnStr += View.ENDLINE()
     }
-    
+
     return returnStr
   }
 }

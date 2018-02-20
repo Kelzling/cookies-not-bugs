@@ -1,10 +1,10 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 31/10/2017
+corrected to conform to standardJS 9/11/2017
 */
 
-/* global Candidate */
+/* global Candidate DEBUG */
 
 class Party { // eslint-disable-line no-unused-vars
 // Class to store information about a party
@@ -79,7 +79,7 @@ class Party { // eslint-disable-line no-unused-vars
     if (DEBUG) { // checks global toggle to see if debugging mode is active
       console.log(`${this.name} has been passed ${this.totalSeats} seats`)
     }
-    
+
     let seatsAllocated = 0 // counter to track how many list seats have been allocated to candidates
     let partyListPostion = 0 // counter to track where in the party list the following loop is
 
@@ -102,7 +102,7 @@ class Party { // eslint-disable-line no-unused-vars
       console.log(`Seats allocated for ${this.name} \n`)
       console.log(this.allMyListMPs)
     }
-    
+
     return this.allMyListMPs
   }
 
