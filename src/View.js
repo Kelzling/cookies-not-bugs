@@ -1,7 +1,6 @@
 /* built by Thomas Baines and Kelsey Vavasour
 Forked from code provided by Mike Lance
-Corrected to conform to standard JS 9/11/2017 */
-
+Corrected to conform to standard JS 21/02/2018 */
 
 /* global DEBUG */
 
@@ -31,11 +30,11 @@ class View { // eslint-disable-line no-unused-vars
     document.body.style.fontFamily = 'Courier New'
     document.body.innerHTML = ''
   }
-  
+
   static out (newText) {
     document.body.innerHTML += newText
   }
-  
+
   static add (newText) {
     // NOTES FOR NEXT TIME: Ask mike about programming standards
     // NOTES FOR NEXT TIME: Re:usage of '<br>' versus calling this.NEWLINE()
@@ -46,11 +45,10 @@ class View { // eslint-disable-line no-unused-vars
       for (let aLine of newText) {
         outString += '<br>' + aLine // add method includes break characters on the start of each line.
       }
-      
     } else { // assume the item is a string, because its not an array.
       outString += '<br>' + newText // adding break character to the line
     }
-    
+
     document.body.innerHTML += outString
   }
 
@@ -83,11 +81,11 @@ class View { // eslint-disable-line no-unused-vars
     for (let anElectorate of unchangedElectorates) {
       renderList.push(`${anElectorate[0]}: ${this.NEWLINE()}${this.TAB()}${anElectorate[1]}`)
     }
-    if(DEBUG) {
+    if (DEBUG) {
       console.log(renderList)
     }
     this.add(renderList)
-    
+
     renderList = []
     renderList.push(`${this.NEWLINE()}Changed Electorates:`)
     for (let anElectorate of changedElectorates) {
@@ -106,7 +104,7 @@ class View { // eslint-disable-line no-unused-vars
     if (DEBUG) {
       console.log(renderList)
     }
-    
+
     this.add(renderList)
   }
 
