@@ -1,10 +1,10 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 31/10/2017
+corrected to conform to standardJS 9/11/2017
 */
 
-/* global Party, View, Electorate */
+/* global Party, View, Electorate DEBUG */
 
 class Election { // eslint-disable-line no-unused-vars
 // Class for handling elections
@@ -85,19 +85,18 @@ class Election { // eslint-disable-line no-unused-vars
         this.allMyParliamentParties.push(aParty)
       }
     }
-    
+
     // for mike
-    let totalVotesInParliament  = 0
+    let totalVotesInParliament = 0
     for (let party of this.allMyParliamentParties) {
       totalVotesInParliament += party.totalVotes
     }
-    
+
     console.log("For Mike's Marking:")
     console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`)
-    
+
     // bit for mike ends
-    
-    
+
     return this.allMyParliamentParties
   }
 
@@ -119,6 +118,41 @@ class Election { // eslint-disable-line no-unused-vars
         }
       }
     }
+    
+    function binaryAdd (aPair, seatsInParliament) {
+      // new binary search function to add paired values into the allocated seats array more efficiently
+      let lowerBound = 0
+      let upperBound = quotientTable.length - 1
+      let targetIndex = 0
+      // initialise search variables
+      
+      if (upperBound === 0) {
+        // Check for first time through the loop, special condition, simply insert the pair
+        quotientTable.splice(0, 0, aPair)
+      } else {
+        while (lowerBound !== upperBound - 1) {
+          // checking to see if the lower and upper bounds are sequential
+          targetIndex = lowerBound + Math.floor((upperBound - lowerBound) / 2)
+          // set the target index to the middle of the two bounds
+          if (quotientTable[targetIndex][1] < aPair[1]) {
+          // if the value at the target index is less than the value to be inserted, move the lower bound, else move the upper bound
+            lowerBound = targetIndex
+          } else {
+            upperBound = targetIndex
+          }
+          
+          if (DEBUG) {
+            console.log(lowerBound + ' ' + upperBound + ' ' + targetIndex)
+          }
+        }
+        
+        quotientTable.splice(upperBound, 0, aPair)
+        // once the while condition has been met (lower/upper bounds are sequential), insert the pair
+      }
+      
+      return (upperBound <= (seatsInParliament - 1))
+      // boolean return for checkBreak table
+    }
 
     function checkBreak () {
       // searches through the breaklist to see if at least one item returned true
@@ -130,9 +164,9 @@ class Election { // eslint-disable-line no-unused-vars
     while (cont) {
       breakList = [] // reset breaklist for each iteration
       for (let aParty of this.allMyParliamentParties) { // iterates through the list of parties
-        let aQuotient = aParty.totalVotes / divisor // calculates qotient for insertion into quotientTable
+        let aQuotient = aParty.totalVotes / divisor // calculates quotient for insertion into quotientTable
         let currentPair = [aParty.name, aQuotient]
-        breakList.push(add(currentPair, this.seatsInParliament)) // adds the current pair to the quotient table and stores the returned boolean in breaklist
+        breakList.push(binaryAdd(currentPair, this.seatsInParliament)) // adds the current pair to the quotient table and stores the returned boolean in breaklist
       }
       divisor += 2 // increment divisor, by two because division is only done by odd numbers
       cont = checkBreak() // runs the checkbreak function to see if the while loop needs to be broken
@@ -154,7 +188,7 @@ class Election { // eslint-disable-line no-unused-vars
       if (DEBUG) { // checks global toggle to see if debugging mode is active
         console.log(aSeatCount)
       }
-      
+
       let aParty = this.findParty(aSeatCount[0])
       if (aParty.getElectorateSeats() > aSeatCount[1]) {
         aSeatCount[1] += aParty.getElectorateSeats() - aSeatCount[1]

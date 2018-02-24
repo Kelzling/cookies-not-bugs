@@ -1,13 +1,11 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 31/10/2017
-CHECKED AGAINST STANDARD JS. DOES NOT CONFORM
-*/
+corrected to conform to standardJS 9/11/2017 */
 
-/* global Election */
+/* global Election Electorate */
 
-const DEBUG = false // toggle to enable verbose debugging logs to console
+const DEBUG = true // toggle to enable verbose debugging logs to console
 
 class NewZealand { // eslint-disable-line no-unused-vars
 /* class to store information about multiple elections
@@ -62,28 +60,24 @@ and perform comparative analysis between them */
       let thisElectorateData = []
       if (!(anElectorate1 instanceof Electorate)) {
         thisElectorateData = [[0, 0, 0], anElectorate2.getVoteBreakdown()]
-      
       } else if (!(anElectorate2 instanceof Electorate)) {
         thisElectorateData = [anElectorate1.getVoteBreakdown(), [0, 0, 0]]
-        
       } else {
         thisElectorateData = [anElectorate1.getVoteBreakdown(), anElectorate2.getVoteBreakdown()]
       }
       electorateVoteData.set(electorate, thisElectorateData)
     }
-    
+
     // generate comparison data points.
     for (let anElectorate of electorateVoteData.keys()) { // iterate through the map
-    
       let thisElectorate = electorateVoteData.get(anElectorate) // get the current electorate's stored data
       let redDifference = thisElectorate[1][0] - thisElectorate[0][0] // calculate the absolute difference for labor votes
       let blueDifference = thisElectorate[1][1] - thisElectorate[0][1] // calculate the absolute difference for National votes
       let blackDifference = thisElectorate[1][2] - thisElectorate[0][2] // calculate the absolute different for "other" votes
       let differentials = [redDifference, blueDifference, blackDifference] // store the absolute differences in an array
       thisElectorate.push(differentials) // store the array as index 2 in the currently worked electorate
-      
+
       electorateVoteData.set(anElectorate, thisElectorate) // store the newly processed data in the map.
-      
     }
 
     // DEBUG PURPOSES ONLY
@@ -113,7 +107,7 @@ and perform comparative analysis between them */
         } else { // else assumes the electorate is changed
           changedElectorates.push([anElectorate, e1Map.get(anElectorate), e2Map.get(anElectorate)])
         }
-      } catch(err) { // this handles bad data, if the electorate doesn't exist in one of the elections
+      } catch (err) { // this handles bad data, if the electorate doesn't exist in one of the elections
         if (err instanceof TypeError) {
           if (e1Map.get(anElectorate)) {
             changedElectorates.push([anElectorate, e1Map.get(anElectorate), null])
@@ -127,13 +121,13 @@ and perform comparative analysis between them */
     }
 
   // for debugging
-  if (DEBUG) { // checks global toggle to see if debugging mode is active
-    console.log('Unchanged electorates:')
-    console.log(unchangedElectorates)
-    console.log('Changed Electorates')
-    console.log(changedElectorates)
-  }
-  
-  return [unchangedElectorates, changedElectorates]
+    if (DEBUG) { // checks global toggle to see if debugging mode is active
+      console.log('Unchanged electorates:')
+      console.log(unchangedElectorates)
+      console.log('Changed Electorates')
+      console.log(changedElectorates)
+    }
+
+    return [unchangedElectorates, changedElectorates]
   }
 }
