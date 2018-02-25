@@ -199,11 +199,11 @@ class Election { // eslint-disable-line no-unused-vars
       while (contDEBUG) {
         breakList = [] // reset breaklist for each iteration
         for (let aParty of this.allMyParliamentParties) { // iterates through the list of parties
-          let aQuotient = aParty.totalVotes / divisor // calculates quotient for insertion into quotientTable
+          let aQuotient = aParty.totalVotes / divisorDEBUG // calculates quotient for insertion into quotientTable
           let currentPair = [aParty.name, aQuotient]
           breakList.push(add(currentPair, this.seatsInParliament)) // adds the current pair to the quotient table and stores the returned boolean in breaklist
         }
-        divisor += 2 // increment divisor, by two because division is only done by odd numbers
+        divisorDEBUG += 2 // increment divisor, by two because division is only done by odd numbers
         contDEBUG = checkBreak() // runs the checkbreak function to see if the while loop needs to be broken
       }
       
