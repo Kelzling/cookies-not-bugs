@@ -107,12 +107,18 @@ class Election { // eslint-disable-line no-unused-vars
     let quotientTable = [[null, 0]] /* quotient table, used to determine the number of seats allocated to a party
                                         needed to be initialized with a null array so the first quotient has something to compare against */
     let breakList = [] // a list, distinct for each loop, of booleans to indicate if the inserted quotient is in an index below 120
-
+    
+    // variable setup and method initialization for the later debug statement
+    if (DEBUG) {
+      console.log('Debugging mode engaged. Running sequential and binary add functions, and comparing output')
+    }
+    
+    let quotientTableDEBUG = [[null, 0]] // for debugging purposes only. Would be within debug statement, but scope error.
     function add (aPair, seatsInParliament) {
       // adds the paired value to the allocated seats array. Returns false if added at index > 119
       for (let index in quotientTable) {
-        if (quotientTable[index][1] < aPair[1]) { // this is a sequential search, fix later for efficency (should be binary)
-          quotientTable.splice(index, 0, aPair) // inserts the value at the correct index and bumps all later values up one index. The 0 indicates no data is deleted
+        if (quotientTableDEBUG[index][1] < aPair[1]) { // this is a sequential search, fix later for efficiency (should be binary)
+          quotientTableDEBUG.splice(index, 0, aPair) // inserts the value at the correct index and bumps all later values up one index. The 0 indicates no data is deleted
           return (index <= (seatsInParliament - 1))  // changed to no longer use this, as the scope for this is limited to the add function
           // boolean return to indicate if the added quotient is within the range that gets allocated to a seat
         }
@@ -129,6 +135,10 @@ class Election { // eslint-disable-line no-unused-vars
       if (upperBound === 0) {
         // Check for first time through the loop, special condition, simply insert the pair
         quotientTable.splice(0, 0, aPair)
+      } else if (aPair[1] < quotientTable[upperBound][1]) { // special condition, if the pair to be inserted is smaller than the smallest item in the quotient table.
+        quotientTable.push(aPair)
+      } else if (aPair[1] > quotientTable[lowerBound][1]) {
+        quotientTable.splice(0, 0, aPair)
       } else {
         while (lowerBound !== upperBound - 1 ) {
           
@@ -138,10 +148,11 @@ class Election { // eslint-disable-line no-unused-vars
           if (quotientTable[targetIndex][1] > aPair[1]) {
           // if the value at the target index is less than the value to be inserted, move the lower bound, else move the upper bound
             lowerBound = targetIndex
-          } else if (quotientTable[targetIndex][1] < aPair[1]) {
+          } else if (quotientTable[targetIndex][1] < aPair[1]) { // hopefully this check can be optimized out, but further testing is required.
             upperBound = targetIndex
           } else {
             // make sure the variable being inserted into the array is pointing to the right place
+            // this code shouldn't be run, unless something very weird is happening.
             upperBound = targetIndex
             break
           }
@@ -176,9 +187,49 @@ class Election { // eslint-disable-line no-unused-vars
       divisor += 2 // increment divisor, by two because division is only done by odd numbers
       cont = checkBreak() // runs the checkbreak function to see if the while loop needs to be broken
     }
-
+    
     let allocatedSeats = quotientTable.slice(0, this.seatsInParliament) // truncates the values from the quotient table that don't translate into a seat allocation
 
+    if (DEBUG) {
+      // this is a testing sequence to confirm that binaryAdd is working correctly.
+      // generates data and runs for the non-binary add method, and compares the output for irregularities.
+      console.log('Binary add and truncation completed. Running sequential add and truncation.')
+      let divisorDEBUG = 1
+      let contDEBUG = true 
+      while (contDEBUG) {
+        breakList = [] // reset breaklist for each iteration
+        for (let aParty of this.allMyParliamentParties) { // iterates through the list of parties
+          let aQuotient = aParty.totalVotes / divisor // calculates quotient for insertion into quotientTable
+          let currentPair = [aParty.name, aQuotient]
+          breakList.push(add(currentPair, this.seatsInParliament)) // adds the current pair to the quotient table and stores the returned boolean in breaklist
+        }
+        divisor += 2 // increment divisor, by two because division is only done by odd numbers
+        contDEBUG = checkBreak() // runs the checkbreak function to see if the while loop needs to be broken
+      }
+      
+      let allocatedSeatsDEBUG = quotientTableDEBUG.slice(0, this.seatsInParliament) // value truncation.
+      console.log('Sequential add and truncation completed. Generating helper function for comparisons and running comparisons.')
+      
+      function compareQuotients (table1, table2) {
+        // helper function that takes two quotient tables and compares them. Returns true if there are any discrepancies, otherwise returns false.
+        let checkList = []
+        checkList.push(table1.length === table2.length) // check tables are same length
+        for (let index in table1) {
+          checkList.push(table1[index][0] === table2[index][0])
+          checkList.push(table1[index][1] === table2[index][1])
+        }
+        return (checkList.includes(false))
+        
+      }
+      
+      if(compareQuotients(allocatedSeats, allocatedSeatsDEBUG)) {
+        console.log('COMPAREQUOTIENTS: Warning, discrepency detected.')
+      } else {
+        console.log('COMPAREQUOTIENTS: add() and binaryAdd() produced identical output. Congradulations!')
+      }
+      
+    }
+    
     // generate a map variable of the parliment parties names as keys and initalises values as 0
     let seatsPerParty = new Map()
     for (let aParty of this.allMyParliamentParties) {
