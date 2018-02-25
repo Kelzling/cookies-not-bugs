@@ -131,16 +131,18 @@ class Election { // eslint-disable-line no-unused-vars
         quotientTable.splice(0, 0, aPair)
       } else {
         while (lowerBound !== upperBound - 1 ) {
+          
           // checking to see if the lower and upper bounds are sequential
           targetIndex = lowerBound + Math.floor((upperBound - lowerBound) / 2)
           // set the target index to the middle of the two bounds
-          if (quotientTable[targetIndex][1] < aPair[1]) {
+          if (quotientTable[targetIndex][1] > aPair[1]) {
           // if the value at the target index is less than the value to be inserted, move the lower bound, else move the upper bound
             lowerBound = targetIndex
-          } else if (quotientTable[targetIndex][1] > aPair[1]) {
+          } else if (quotientTable[targetIndex][1] < aPair[1]) {
             upperBound = targetIndex
           } else {
             // make sure the variable being inserted into the array is pointing to the right place
+            upperBound = targetIndex
             break
           }
           
