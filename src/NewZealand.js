@@ -5,7 +5,7 @@ corrected to conform to standardJS 9/11/2017 */
 
 /* global Election Electorate */
 
-const DEBUG = false // toggle to enable verbose debugging logs to console
+const DEBUG = true // toggle to enable verbose debugging logs to console
 
 class NewZealand { // eslint-disable-line no-unused-vars
 /* class to store information about multiple elections
