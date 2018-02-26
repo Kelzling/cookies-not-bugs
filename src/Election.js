@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 9/11/2017
+corrected to conform to standardJS 26/02/2018
 */
 
 /* global Party, View, Electorate DEBUG */
@@ -107,12 +107,12 @@ class Election { // eslint-disable-line no-unused-vars
     let quotientTable = [[null, 0]] /* quotient table, used to determine the number of seats allocated to a party
                                         needed to be initialized with a null array so the first quotient has something to compare against */
     let breakList = [] // a list, distinct for each loop, of booleans to indicate if the inserted quotient is in an index below 120
-    
+
     // variable setup and method initialization for the later debug statement
     if (DEBUG) {
       console.log('Debugging mode engaged. Running sequential and binary add functions, and comparing output')
     }
-    
+
     let quotientTableDEBUG = [[null, 0]] // for debugging purposes only. Would be within debug statement, but scope error.
     function add (aPair, seatsInParliament) {
       // adds the paired value to the allocated seats array. Returns false if added at index > 119
@@ -124,14 +124,14 @@ class Election { // eslint-disable-line no-unused-vars
         }
       }
     }
-    
+
     function binaryAdd (aPair, seatsInParliament) {
       // new binary search function to add paired values into the allocated seats array more efficiently
       let lowerBound = 0
       let upperBound = quotientTable.length - 1
       let targetIndex = 0
       // initialise search variables
-      
+
       if (upperBound === 0) {
         // Check for first time through the loop, special condition, simply insert the pair
         quotientTable.splice(0, 0, aPair)
@@ -140,8 +140,7 @@ class Election { // eslint-disable-line no-unused-vars
       } else if (aPair[1] > quotientTable[lowerBound][1]) {
         quotientTable.splice(0, 0, aPair)
       } else {
-        while (lowerBound !== upperBound - 1 ) {
-          
+        while (lowerBound !== upperBound - 1) {
           // checking to see if the lower and upper bounds are sequential
           targetIndex = lowerBound + Math.floor((upperBound - lowerBound) / 2)
           // set the target index to the middle of the two bounds
@@ -156,16 +155,16 @@ class Election { // eslint-disable-line no-unused-vars
             upperBound = targetIndex
             break
           }
-          
+
           if (DEBUG) {
             console.log(lowerBound + ' ' + upperBound + ' ' + targetIndex)
           }
         }
-        
+
         quotientTable.splice(upperBound, 0, aPair)
         // once the while condition has been met (lower/upper bounds are sequential), insert the pair
       }
-      
+
       return (upperBound <= (seatsInParliament - 1))
       // boolean return for checkBreak table
     }
@@ -187,7 +186,7 @@ class Election { // eslint-disable-line no-unused-vars
       divisor += 2 // increment divisor, by two because division is only done by odd numbers
       cont = checkBreak() // runs the checkbreak function to see if the while loop needs to be broken
     }
-    
+
     let allocatedSeats = quotientTable.slice(0, this.seatsInParliament) // truncates the values from the quotient table that don't translate into a seat allocation
 
     if (DEBUG) {
@@ -195,7 +194,7 @@ class Election { // eslint-disable-line no-unused-vars
       // generates data and runs for the non-binary add method, and compares the output for irregularities.
       console.log('Binary add and truncation completed. Running sequential add and truncation.')
       let divisorDEBUG = 1
-      let contDEBUG = true 
+      let contDEBUG = true
       while (contDEBUG) {
         breakList = [] // reset breaklist for each iteration
         for (let aParty of this.allMyParliamentParties) { // iterates through the list of parties
@@ -206,11 +205,11 @@ class Election { // eslint-disable-line no-unused-vars
         divisorDEBUG += 2 // increment divisor, by two because division is only done by odd numbers
         contDEBUG = checkBreak() // runs the checkbreak function to see if the while loop needs to be broken
       }
-      
+
       let allocatedSeatsDEBUG = quotientTableDEBUG.slice(0, this.seatsInParliament) // value truncation.
       console.log('Sequential add and truncation completed. Generating helper function for comparisons and running comparisons.')
-      
-      function compareQuotients (table1, table2) {
+
+      function compareQuotients (table1, table2) { // eslint-disable-line no-inner-declarations
         // helper function that takes two quotient tables and compares them. Returns true if there are any discrepancies, otherwise returns false.
         let checkList = []
         checkList.push(table1.length === table2.length) // check tables are same length
@@ -219,17 +218,15 @@ class Election { // eslint-disable-line no-unused-vars
           checkList.push(table1[index][1] === table2[index][1])
         }
         return (checkList.includes(false))
-        
       }
-      
-      if(compareQuotients(allocatedSeats, allocatedSeatsDEBUG)) {
+
+      if (compareQuotients(allocatedSeats, allocatedSeatsDEBUG)) {
         console.log('COMPAREQUOTIENTS: Warning, discrepency detected.')
       } else {
         console.log('COMPAREQUOTIENTS: add() and binaryAdd() produced identical output. Congradulations!')
       }
-      
     }
-    
+
     // generate a map variable of the parliment parties names as keys and initalises values as 0
     let seatsPerParty = new Map()
     for (let aParty of this.allMyParliamentParties) {
