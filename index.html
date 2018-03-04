@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta name='description' content='A Javascript based program for processing and comparing raw election data'>
+  <meta name='author' content='Thomas Baines and Kelsey Vavasour'>
+	<title>Election Comparison Program</title>
+	<link rel="stylesheet" href=".\css\stylesheet.css">
+  <script>
+  // script stuff goes in here
+  </script>
+</head>
+<body>
+
+<h1>Election Data Viewer</h1>
+
+<div id='upperDisplay' class='container'>'
+  <h2>Years: </h2> <h2 id='year1Title'></h2> <h2> + </h2> <h2 id='year2Title'></h2>
+  <button onclick='loadPage()'>GO</button> <!-- this looks weird, fix later -->
+</div>
+
+<br>
+<div id='years' class='container'>
+
+  <div id='year1Main' class='innerBlock'>
+    <h3>Election </h3><h3 id='year1Title'></h3>
+    <br>
+  </div>
+  <br>
+  <div id='year2Main' class='innerBlock'>
+    <h3>Election </h3><h3 id='year2Title'></h3>
+    <br>
+  </div>
+
+</div>
+<br>
+<br>
+<div id='comparisons' class='container'>
+
+  <div id='electorateMpParty' class='innerBlock'>
+    <br>
+  </div>
+  <br>
+  <div id='partyVoteChanges' class='innerBlock'>
+    <br>
+  </div>
+
+</div>
+</main>
+
+</body>
+</html>
