@@ -22,6 +22,11 @@ main {
 body {
   margin-left: 0.2em;
   margin-right: 0.2em;
+  font-family: Courier New;
+}
+
+button {
+  margin-right: 0.2em;
 }
 
 h1 {
@@ -32,7 +37,7 @@ h1 {
 }
 
 h2 {
-  font-size: 2em;
+  font-size: 1.8em;
 }
 
 h3 {
@@ -63,8 +68,23 @@ h3 {
   border-style: inset;
   border-width: 0.1em;
   border-color: grey;
-  padding-top: 0.2em;
+  padding: 0.2em;
+  /* padding-top: 0.2em;
   padding-bottom: 0.2em;
+  padding-left: 0.2em;
+  padding-right: 0.2em; */
   margin-left: 0.1em;
   margin-right: 0.1em;
+}
+
+#default {
+  display: block;
+}
+
+#comparisons {
+  display: block;
+}
+
+#comparisonsInner {
+  border: none;
 }

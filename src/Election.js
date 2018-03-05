@@ -4,7 +4,7 @@ All Rights Reserved
 corrected to conform to standardJS 26/02/2018
 */
 
-/* global Party, View, Electorate DEBUG */
+/* global Party, View, Electorate, DEBUG, VERBOSE */
 
 class Election { // eslint-disable-line no-unused-vars
 // Class for handling elections
@@ -92,11 +92,12 @@ class Election { // eslint-disable-line no-unused-vars
       totalVotesInParliament += party.totalVotes
     }
 
+  if (VERBOSE) {
     console.log("For Mike's Marking:")
     console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`)
 
     // bit for mike ends
-
+  }
     return this.allMyParliamentParties
   }
 
@@ -324,6 +325,6 @@ class Election { // eslint-disable-line no-unused-vars
   }
 
   toString () {
-    return `Election ${this.year}\n`
+    return this.year
   }
 }
