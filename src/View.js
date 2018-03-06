@@ -1,8 +1,8 @@
 /* built by Thomas Baines and Kelsey Vavasour
 Forked from code provided by Mike Lance
-Corrected to conform to standard JS 21/02/2018 */
+Corrected to conform to standard JS 07/03/2018 */
 
-/* global DEBUG */
+/* global DEBUG VERBOSE */
 
 class View { // eslint-disable-line no-unused-vars
   static BLANK () {
@@ -25,8 +25,8 @@ class View { // eslint-disable-line no-unused-vars
   static ENDLINE () {
     return '.<br>'
   }
-  
-  static clearMultiple(...idList) {
+
+  static clearMultiple (...idList) {
     for (let item of idList) {
       this.clear(item)
     }
@@ -163,7 +163,7 @@ class View { // eslint-disable-line no-unused-vars
       console.log(aCountry.allMyElections)
     }
     for (let anElection in aCountry.allMyElections) {
-      this.renderElection(country.allMyElections[anElection], anElection) // changed to now pass index in the array. Used in renderElection()
+      this.renderElection(aCountry.allMyElections[anElection], anElection) // changed to now pass index in the array. Used in renderElection()
     }
     // this.add(`${this.NEWLINE()}Comparisons between Election ${year1} and Election ${year2}${this.ENDLINE()}`) // depreciated with adding the html 2.0
     this.renderElectorateMPComparisons(aCountry, year1, year2)
