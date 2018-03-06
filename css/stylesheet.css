@@ -1,0 +1,90 @@
+/* RESET */
+
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, a, article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section {
+    /* Cancel out some differences between browser defaults */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+ 
+* {
+    /* The width of an element will be the size of its border box, not its content box (which is the normal default). */
+    box-sizing: border-box;
+}
+
+main { 
+    /* Make sure the browser knows how to display the HTML5 main element. */
+    display: block;
+}
+
+body {
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  font-family: Courier New;
+}
+
+button {
+  margin-right: 0.2em;
+}
+
+h1 {
+  font-size: 3em;
+  text-align: center;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+h3 {
+  font-size: 1.6em;
+}
+
+#upperDisplay *{
+  display: inline;
+}
+
+.container {
+  border-style: solid;
+  border-width: 0.3em;
+  border-radius: 0.6em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.container * {
+  flex-grow: 1;
+}
+
+.innerBlock {
+  display: block;
+  border-style: inset;
+  border-width: 0.1em;
+  border-color: grey;
+  padding: 0.2em;
+  /* padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  padding-left: 0.2em;
+  padding-right: 0.2em; */
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+}
+
+#default {
+  display: block;
+}
+
+#comparisons {
+  display: block;
+}
+
+#comparisonsInner {
+  border: none;
+}
