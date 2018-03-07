@@ -4,8 +4,6 @@ class Import {
     // function to take csv data and output it as arrays that can be fed to Election.addParty and Party.addListCandidates
     console.log('file has loaded')
     
-    // Add some form of 'is this a csv file' check
-    
     // Split the initial file into an array where each element is the data for one party. The RegEx uses a Look Ahead in order to only match a new line where the next line starts with a Letter (all candidates start with numbers) without .split consuming the first letter of the party name.
     let splitDelimiter = new RegExp('\n(?=[a-z])', 'i')
     let splitParties = event.target.result.split(splitDelimiter)
@@ -31,6 +29,8 @@ class Import {
         newParty.addListCandidates(...allNewCandidates)
       }
     } // else throw a 'not the right file' error which will be caught somewhere to return a 'choose another file alert'
+    
+    // Sort allMyParties array by Party.name at the end of the function so they will still be in the correct order when loading parties from two separate files (successful/unsuccessful)
   }
   
   static fileChangeHandler (event) {
@@ -40,7 +40,23 @@ class Import {
     // this will point to a function that determines what type of data we are entering once we are working with more than one set of data
     
     let theFile = event.target.files[0]
+    
+    // Had to check if the file was a .CSV before the program finishes reading it as text, otherwise we can't access it's .name property.
+    try {
+      if (!theFile.name.includes('.csv')) { // something about this line isn't quite working properly
+        throw new Error("Wrong File Type")
+      }
+    } catch (err) {
+      if (err.message.includes("Wrong File")) {
+        alert('Wrong File Type! Please Upload a .CSV file instead.')
+        return false
+      } else {
+        throw err
+      }
+    } 
     // we will only be allowing one file to be selected at this stage
     reader.readAsText(theFile)
   }
 }
+
+// class FileTypeError extends Error {}
