@@ -1,3 +1,8 @@
+/* Coded by Thomas Baines and Kelsey Vavasour.
+March 2018
+all rights reserved */
+
+
 class Tester {
 // automated debugging toolkit for election data analysis program.
 
