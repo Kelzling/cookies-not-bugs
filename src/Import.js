@@ -1,3 +1,7 @@
+/* Coded by Thomas Baines and Kelsey Vavasour
+August 2017
+All Rights Reserved */
+
 class Import {
   
   static populateParties(event) {
@@ -10,13 +14,20 @@ class Import {
     console.log(splitParties)
     
     // check to see if the file starts with the correct line of text
-    if (splitParties[0].includes('Party Lists of Successful Registered Parties')) {
+    let validFileTest = new RegExp('Party Lists.*Registered Parties')
+    console.log(validFileTest)
+    console.log(validFileTest.test(splitParties[0]))
+    if (validFileTest.test(splitParties[0])) { //   (splitParties[0].includes(/Party Lists.*Registered Parties/))  old version
       // remove first line
       splitParties.shift()
       for (let aParty of splitParties) {
         // Split each party into its own array of individual lines
         let splitData = aParty.split(/\n/)
         console.log(splitData)
+        // The last line of the .CSV file is blank, so checking to see if the last element is blank. If so, remove it.
+        if (splitData[splitData.length - 1] == '') {
+          splitData.pop()
+        }
         // Make a new instance of Party using the name
         let newParty = theElection.addParty(splitData.shift())
         // Create an array of Candidate names after stripping the excess data from either side
@@ -28,7 +39,9 @@ class Import {
         // add all the candidates to our party!
         newParty.addListCandidates(...allNewCandidates)
       }
-    } // else throw a 'not the right file' error which will be caught somewhere to return a 'choose another file alert'
+    } else {
+      alert('Data not compatible, please choose another file.')
+    }
     
     // Sort allMyParties array by Party.name at the end of the function so they will still be in the correct order when loading parties from two separate files (successful/unsuccessful)
   }
@@ -59,4 +72,4 @@ class Import {
   }
 }
 
-// class FileTypeError extends Error {}
+// class FileError extends Error {} // Do something with this at some point to throw slightly more useful errors
