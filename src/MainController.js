@@ -20,9 +20,9 @@ class Controller { // eslint-disable-line no-unused-vars
       
       // current working code, is subject to regular and random changes.
       var test = new Tester(2017)
-      let debugElection = theCountry.findElection(2014)
-      let debugCandidate = debugElection.findCandidate('NORMAN, Russel William', 'Green Party')
-      test.compareCandidate(debugCandidate)
+      let debugElection = theCountry.findElection(2017)
+      let debugParty = debugElection.findParty('Labour Party')
+      test.compareParty(debugParty)
       // DEBUG CODE ENDS
     }
 
