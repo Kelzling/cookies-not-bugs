@@ -1,15 +1,17 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 March 2018
-All Rights Reserved */
+All Rights Reserved
+corrected to conform to standardJS 9/03/2018 */
 
-class Import {
-  
-  static populateParties(event) {
+/* global VERBOSE, theElection, alert, FileReader */
+
+class Import { // eslint-disable-line no-unused-vars
+  static populateParties (event) {
     // function to take csv data and output it as arrays that can be fed to Election.addParty and Party.addListCandidates
     console.log('file has loaded')
-    
+
     // Split the initial file into an array where each element is the data for one party. The RegEx uses a Look Ahead in order to only match a new line where the next line starts with a Letter (all candidates start with numbers) without .split consuming the first letter of the party name.
-    let splitDelimiter = new RegExp('\n(?=[a-z])', 'i')
+    let splitDelimiter = new RegExp('\n(?=[a-z])', 'i') // eslint-disable-line no-control-regex
     let splitParties = event.target.result.split(splitDelimiter)
     if (VERBOSE) {
       console.log(splitParties)
@@ -30,7 +32,7 @@ class Import {
           console.log(splitData)
         }
         // The last line of the .CSV file is blank, so checking to see if the last element is blank. If so, remove it.
-        if (splitData[splitData.length - 1] == '') {
+        if (splitData[splitData.length - 1] === '') {
           splitData.pop()
         }
         // Make a new instance of Party using the name
@@ -49,31 +51,31 @@ class Import {
     } else {
       alert('Data not compatible, please choose another file.')
     }
-    
+
     // Sort allMyParties array by Party.name at the end of the function so they will still be in the correct order when loading parties from two separate files (successful/unsuccessful)
   }
-  
+
   static fileChangeHandler (event) {
     // initial change event handler once file has been selected. Creates the FileReader object and directs it to the correct function
     let reader = new FileReader()
     reader.onload = Import.populateParties
     // this will point to a function that determines what type of data we are entering once we are working with more than one set of data
-    
+
     let theFile = event.target.files[0]
-    
+
     // Had to check if the file was a .CSV before the program finishes reading it as text, otherwise we can't access it's .name property.
     try {
-      if (!theFile.name.includes('.csv')) { // something about this line isn't quite working properly
-        throw new Error("Wrong File Type")
+      if (!theFile.name.includes('.csv')) {
+        throw new Error('Wrong File Type')
       }
     } catch (err) {
-      if (err.message.includes("Wrong File")) {
+      if (err.message.includes('Wrong File')) {
         alert('Wrong File Type! Please Upload a .CSV file instead.')
         return false
       } else {
         throw err
       }
-    } 
+    }
     // we will only be allowing one file to be selected at this stage
     reader.readAsText(theFile)
   }

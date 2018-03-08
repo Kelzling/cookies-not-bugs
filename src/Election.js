@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 26/02/2018
+corrected to conform to standardJS 9/03/2018
 */
 
 /* global Party, View, Electorate DEBUG */
@@ -26,8 +26,8 @@ class Election { // eslint-disable-line no-unused-vars
     this.allMyParties.push(newParty)
     return newParty
   }
-  
-  sortParties() {
+
+  sortParties () {
     this.allMyParties.sort((a, b) => {
       if (a.name < b.name) {
         return -1
@@ -36,8 +36,8 @@ class Election { // eslint-disable-line no-unused-vars
       } else {
         return 0
       }
-     })
-  } 
+    })
+  }
 
   addElectorate (newElectorateName) {
     /* Create an instance of Electorate called newElectorateName
