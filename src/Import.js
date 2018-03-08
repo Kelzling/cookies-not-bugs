@@ -11,19 +11,24 @@ class Import {
     // Split the initial file into an array where each element is the data for one party. The RegEx uses a Look Ahead in order to only match a new line where the next line starts with a Letter (all candidates start with numbers) without .split consuming the first letter of the party name.
     let splitDelimiter = new RegExp('\n(?=[a-z])', 'i')
     let splitParties = event.target.result.split(splitDelimiter)
-    console.log(splitParties)
-    
+    if (VERBOSE) {
+      console.log(splitParties)
+    }
     // check to see if the file starts with the correct line of text
     let validFileTest = new RegExp('Party Lists.*Registered Parties')
-    console.log(validFileTest)
-    console.log(validFileTest.test(splitParties[0]))
+    if (VERBOSE) {
+      console.log(validFileTest)
+      console.log(validFileTest.test(splitParties[0]))
+    }
     if (validFileTest.test(splitParties[0])) { //   (splitParties[0].includes(/Party Lists.*Registered Parties/))  old version
       // remove first line
       splitParties.shift()
       for (let aParty of splitParties) {
         // Split each party into its own array of individual lines
         let splitData = aParty.split(/\n/)
-        console.log(splitData)
+        if (VERBOSE) {
+          console.log(splitData)
+        }
         // The last line of the .CSV file is blank, so checking to see if the last element is blank. If so, remove it.
         if (splitData[splitData.length - 1] == '') {
           splitData.pop()
@@ -39,6 +44,8 @@ class Import {
         // add all the candidates to our party!
         newParty.addListCandidates(...allNewCandidates)
       }
+      // Ensure the array of Party objects is still sorted alphabetically for later data storage
+      theElection.sortParties()
     } else {
       alert('Data not compatible, please choose another file.')
     }

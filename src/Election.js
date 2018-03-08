@@ -26,6 +26,18 @@ class Election { // eslint-disable-line no-unused-vars
     this.allMyParties.push(newParty)
     return newParty
   }
+  
+  sortParties() {
+    this.allMyParties.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1
+      } else if (a.name > b.name) {
+        return 1
+      } else {
+        return 0
+      }
+     })
+  } 
 
   addElectorate (newElectorateName) {
     /* Create an instance of Electorate called newElectorateName
