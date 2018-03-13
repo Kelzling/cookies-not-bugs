@@ -6,13 +6,13 @@ corrected to conform to standardJS 9/03/2018 */
 /* global VERBOSE, theElection, alert, FileReader */
 
 class Import { // eslint-disable-line no-unused-vars
-  static populateParties (event) {
+  static populateParties (aFile) {
     // function to take csv data and output it as arrays that can be fed to Election.addParty and Party.addListCandidates
     console.log('file has loaded')
 
     // Split the initial file into an array where each element is the data for one party. The RegEx uses a Look Ahead in order to only match a new line where the next line starts with a Letter (all candidates start with numbers) without .split consuming the first letter of the party name.
     let splitDelimiter = new RegExp('\n(?=[a-z])', 'i') // eslint-disable-line no-control-regex
-    let splitParties = event.target.result.split(splitDelimiter)
+    let splitParties = aFile.split(splitDelimiter)
     if (VERBOSE) {
       console.log(splitParties)
     }
@@ -51,14 +51,51 @@ class Import { // eslint-disable-line no-unused-vars
     } else {
       alert('Data not compatible, please choose another file.')
     }
+}
 
-    // Sort allMyParties array by Party.name at the end of the function so they will still be in the correct order when loading parties from two separate files (successful/unsuccessful)
+  static populateElectorateWinners (aFile) {
+    let fileLines = aFile.split(/\n/)
+    let validFileTest = new RegExp(/^Winning Electorate Candidate Votes/)
+    if (validFileTest.test(fileLines[0])) {
+      fileLines = fileLines.slice(2) // Removing the first two lines as they contain header data, not data to be imported
+      for (let aLine of fileLines) {
+        let lineData = aLine.split(',')
+        theElection.addElectorate(lineData[0])
+      }
+    }
+  }
+
+  static selectInputFormat (event) {
+    // Function to check header of the uploaded file and run the correct import function
+    let validHeaders = ['Party Lists of Successful Registered Parties', 'Party Lists of Unsuccessful Registered Parties', 'Votes for Registered Parties by Electorate', 'Winning Electorate Candidate Votes']
+    let theFile = event.target.result; // Storing the file that has been read as text in a variable for further usage
+  let theHeader = theFile.substring(0, theFile.search(/\r?\n/)) // Storing the first line of the file to check what data it contains. Matches both just a newline character and the windows carriage return + newline character
+    if (validHeaders.includes(theHeader)) {
+      switch (theHeader) {
+        case validHeaders[0]:
+          // Import Successful Parties and their Party Lists
+          Import.populateParties(theFile)
+          break
+        case validHeaders[1]:
+          // Import Unsuccessful Parties and their Party Lists
+          Import.populateParties(theFile)
+          break
+        case validHeaders[2]:
+          // import Electorates and votes function
+          break
+        case validHeaders[3]:
+          // import Electorates and Winning Candidates function
+          break
+      }
+    } else {
+      alert('Data not recognised. Please upload a valid file.') // throwing tantrum
+    }
   }
 
   static fileChangeHandler (event) {
     // initial change event handler once file has been selected. Creates the FileReader object and directs it to the correct function
     let reader = new FileReader()
-    reader.onload = Import.populateParties
+    reader.onload = Import.selectInputFormat;
     // this will point to a function that determines what type of data we are entering once we are working with more than one set of data
 
     let theFile = event.target.files[0]
