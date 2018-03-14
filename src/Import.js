@@ -27,7 +27,7 @@ class Import { // eslint-disable-line no-unused-vars
       splitParties.shift()
       for (let aParty of splitParties) {
         // Split each party into its own array of individual lines
-        let splitData = aParty.split(/\n/)
+        let splitData = aParty.split(/\r?\n/) // Need to consume the carriage return as well as the newline character if it exists, as otherwise the name will not match 
         if (VERBOSE) {
           console.log(splitData)
         }
@@ -57,10 +57,19 @@ class Import { // eslint-disable-line no-unused-vars
     let fileLines = aFile.split(/\n/)
     let validFileTest = new RegExp(/^Winning Electorate Candidate Votes/)
     if (validFileTest.test(fileLines[0])) {
-      fileLines = fileLines.slice(2) // Removing the first two lines as they contain header data, not data to be imported
+      fileLines = fileLines.slice(2, -1) // Removing the first two lines as they contain header data, not data to be imported
       for (let aLine of fileLines) {
-        let lineData = aLine.split(',')
-        theElection.addElectorate(lineData[0])
+        // split each line and save the data we require for importing purposes
+      let lineData = aLine.split(/,(?=[^\s])/)
+        let electorateName = lineData[0]
+        let candidateName = lineData[1].substring(1, lineData[1].lastIndexOf('"')) // Trimming the quotation marks from around the name
+        let partyName = lineData[2]
+        
+        let anElectorate = theElection.findElectorate(electorateName)
+        if (!anElectorate) {
+          anElectorate = theElection.addElectorate(electorateName)
+        }
+        anElectorate.addWinner(candidateName, partyName)
       }
     }
   }
@@ -69,7 +78,7 @@ class Import { // eslint-disable-line no-unused-vars
     // Function to check header of the uploaded file and run the correct import function
     let validHeaders = ['Party Lists of Successful Registered Parties', 'Party Lists of Unsuccessful Registered Parties', 'Votes for Registered Parties by Electorate', 'Winning Electorate Candidate Votes']
     let theFile = event.target.result; // Storing the file that has been read as text in a variable for further usage
-  let theHeader = theFile.substring(0, theFile.search(/\r?\n/)) // Storing the first line of the file to check what data it contains. Matches both just a newline character and the windows carriage return + newline character
+  let theHeader = theFile.substring(0, theFile.search(/\r?\n/)) // Returns the first header line of the file, from index 0 to the index of the first newline character. The regex matches both just a newline character and the windows carriage return + newline character combo.
     if (validHeaders.includes(theHeader)) {
       switch (theHeader) {
         case validHeaders[0]:
@@ -85,6 +94,7 @@ class Import { // eslint-disable-line no-unused-vars
           break
         case validHeaders[3]:
           // import Electorates and Winning Candidates function
+          Import.populateElectorateWinners(theFile)
           break
       }
     } else {
