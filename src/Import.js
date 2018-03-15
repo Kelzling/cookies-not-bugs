@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 March 2018
 All Rights Reserved
-corrected to conform to standardJS 9/03/2018 */
+corrected to conform to standardJS 15/03/2018 */
 
 /* global VERBOSE, theElection, alert, FileReader */
 
@@ -27,7 +27,7 @@ class Import { // eslint-disable-line no-unused-vars
       splitParties.shift()
       for (let aParty of splitParties) {
         // Split each party into its own array of individual lines
-        let splitData = aParty.split(/\r?\n/) // Need to consume the carriage return as well as the newline character if it exists, as otherwise the name will not match 
+        let splitData = aParty.split(/\r?\n/) // Need to consume the carriage return as well as the newline character if it exists, as otherwise the name will not match
         if (VERBOSE) {
           console.log(splitData)
         }
@@ -51,7 +51,7 @@ class Import { // eslint-disable-line no-unused-vars
     } else {
       alert('Data not compatible, please choose another file.')
     }
-}
+  }
 
   static populateElectorateWinners (aFile) {
     let fileLines = aFile.split(/\n/)
@@ -60,11 +60,11 @@ class Import { // eslint-disable-line no-unused-vars
       fileLines = fileLines.slice(2, -1) // Removing the first two lines as they contain header data, not data to be imported
       for (let aLine of fileLines) {
         // split each line and save the data we require for importing purposes
-      let lineData = aLine.split(/,(?=[^\s])/)
+        let lineData = aLine.split(/,(?=[^\s])/)
         let electorateName = lineData[0]
         let candidateName = lineData[1].substring(1, lineData[1].lastIndexOf('"')) // Trimming the quotation marks from around the name
         let partyName = lineData[2]
-        
+
         let anElectorate = theElection.findElectorate(electorateName)
         if (!anElectorate) {
           anElectorate = theElection.addElectorate(electorateName)
@@ -77,8 +77,8 @@ class Import { // eslint-disable-line no-unused-vars
   static selectInputFormat (event) {
     // Function to check header of the uploaded file and run the correct import function
     let validHeaders = ['Party Lists of Successful Registered Parties', 'Party Lists of Unsuccessful Registered Parties', 'Votes for Registered Parties by Electorate', 'Winning Electorate Candidate Votes']
-    let theFile = event.target.result; // Storing the file that has been read as text in a variable for further usage
-  let theHeader = theFile.substring(0, theFile.search(/\r?\n/)) // Returns the first header line of the file, from index 0 to the index of the first newline character. The regex matches both just a newline character and the windows carriage return + newline character combo.
+    let theFile = event.target.result // Storing the file that has been read as text in a variable for further usage
+    let theHeader = theFile.substring(0, theFile.search(/\r?\n/)) // Returns the first header line of the file, from index 0 to the index of the first newline character. The regex matches both just a newline character and the windows carriage return + newline character combo.
     if (validHeaders.includes(theHeader)) {
       switch (theHeader) {
         case validHeaders[0]:
@@ -105,7 +105,7 @@ class Import { // eslint-disable-line no-unused-vars
   static fileChangeHandler (event) {
     // initial change event handler once file has been selected. Creates the FileReader object and directs it to the correct function
     let reader = new FileReader()
-    reader.onload = Import.selectInputFormat;
+    reader.onload = Import.selectInputFormat
     // this will point to a function that determines what type of data we are entering once we are working with more than one set of data
 
     let theFile = event.target.files[0]
