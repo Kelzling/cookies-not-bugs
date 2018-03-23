@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 26/02/2018
+corrected to conform to standardJS 9/03/2018
 */
 
 /* global Party, View, Electorate DEBUG */
@@ -25,6 +25,18 @@ class Election { // eslint-disable-line no-unused-vars
     let newParty = new Party(capsPartyName, this)
     this.allMyParties.push(newParty)
     return newParty
+  }
+
+  sortParties () {
+    this.allMyParties.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1
+      } else if (a.name > b.name) {
+        return 1
+      } else {
+        return 0
+      }
+    })
   }
 
   addElectorate (newElectorateName) {

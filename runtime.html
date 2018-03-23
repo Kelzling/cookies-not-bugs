@@ -9,7 +9,10 @@
 <script src="src/Electorate.js"></script>
 <script src="src/Election.js"></script>
 <script src="src/NewZealand.js"></script>
+
 <script src="src/Tester.js"></script>
+<script src="src/Import.js"></script>
+
 
 <!--Two controllers, one for election 2017 and one for election 2014-->
 <script src="src/Controller2014.js"></script>
@@ -21,18 +24,38 @@
 </head>
 <body>
 <script>
-var country // deliberately GLOBAL for debugging!
+/* var country // deliberately GLOBAL for debugging!
 var go = function () {
  country = Controller.setup()
  let theDisplay = document.getElementById('divDisplay')
  document.body.style.fontFamily = 'Courier New'
  View.renderCountry(country, 2014, 2017)
- /* for (item of country.allMyElections) {
+ for (item of country.allMyElections) {
   theDisplay.innerHTML += item.getAll()
- } */
+ }
  // console.log(Election)
-}
-window.onload = go
+} */
+// window.onload = go
+
+// The above is currently off as the focus of this iteration is handling data import, not anything to do with displaying the data, so we don't need the entire program to run.
+
+var theElection = new Election(42) // global, test election for adding data to
+var testElectorate = theElection.addElectorate('Auckland Central', 42)
+  
+  // Copied from Mike, simple file input that will call a handling function. Will integrate with new HTML site properly once back end code is working.
+  // create an input HTML element as ibxFile
+  var ibxFile = document.createElement("INPUT");
+  // set the type of the HTML element to "file"
+  ibxFile.setAttribute("type", "file");
+  // set the id fo the HTML element to "inputFile"
+  ibxFile.setAttribute("id", "inputFile");
+  // only allow one file to be selected so this is currently commented out
+  // ibxFile.setAttribute("multiple", "multiple");
+    
+  // append the ibxFile element to the body of this HTML page
+  document.body.appendChild(ibxFile);
+      
+  document.getElementById("inputFile").addEventListener('change', Import.fileChangeHandler);
 </script>
 </body>
 </html>
