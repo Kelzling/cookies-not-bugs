@@ -98,14 +98,15 @@ class Election { // eslint-disable-line no-unused-vars
       }
     }
 
-    // for mike
+    /* // for mike - Depreciated
     let totalVotesInParliament = 0
     for (let party of this.allMyParliamentParties) {
       totalVotesInParliament += party.totalVotes
     }
 
+    
     console.log("For Mike's Marking:")
-    console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`)
+    console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`) */
 
     // bit for mike ends
 
