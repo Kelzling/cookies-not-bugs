@@ -11,7 +11,7 @@ class Import { // eslint-disable-line no-unused-vars
     console.log('file has loaded')
 
     // Split the initial file into an array where each element is the data for one party. The RegEx uses a Look Ahead in order to only match a new line where the next line starts with a Letter (all candidates start with numbers) without .split consuming the first letter of the party name.
-    let splitDelimiter = new RegExp('\n(?=[a-z])', 'i') // eslint-disable-line no-control-regex
+    let splitDelimiter = new RegExp('\r?\n(?=[a-z])', 'i') // eslint-disable-line no-control-regex
     let splitParties = aFile.split(splitDelimiter)
     if (VERBOSE) {
       console.log(splitParties)
@@ -71,6 +71,32 @@ class Import { // eslint-disable-line no-unused-vars
         }
         anElectorate.addWinner(candidateName, partyName)
       }
+    } else {
+      alert('Data not compatible, please choose another file.')
+    }
+  }
+  
+  static populateVotesByElectorate (theFile) {
+    // takes data from .csv file and processes it to be passed to Electorate and Party objects
+    let validFileTest = new RegExp(/^Votes for Registered Parties/)
+    let lineData = theFile.split(/\r?\n/)
+    let theHeader = lineData.shift()
+    if (validFileTest.test(theHeader)) {
+      let validPartyString = lineData.shift()
+      let validPartyList = validPartyString.split(',')
+      validPartyList.shift() // first section just says 'Electorate', not needed for check
+      // Make a compare this array to the elections array of parties function
+      lineData.pop() // last line is blank
+      for (let aLine of lineData) {
+        let voteData = aLine.split(',')
+        voteData.pop() // last item in array will be the total number of votes, which we don't want to keep
+        let electorateName = voteData.shift()
+        let anElectorate = theElection.findElectorate(electorateName)
+        if (!anElectorate) {
+          anElectorate = theElection.addElectorate(electorateName)
+        }
+        anElectorate.addPartyVotes(...voteData)
+      }
     }
   }
 
@@ -91,6 +117,7 @@ class Import { // eslint-disable-line no-unused-vars
           break
         case validHeaders[2]:
           // import Electorates and votes function
+          Import.populateVotesByElectorate(theFile)
           break
         case validHeaders[3]:
           // import Electorates and Winning Candidates function
