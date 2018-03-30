@@ -69,6 +69,10 @@ class Party { // eslint-disable-line no-unused-vars
     return this.allMyElectorateMPs.length
   }
 
+  getName() {
+    return this.name
+  }
+  
   addSeats (newSeats) {
     // takes the number of allocated seats from election.allocateSeats() and stores it.
     // More processing will be required here later

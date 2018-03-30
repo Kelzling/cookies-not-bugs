@@ -51,6 +51,9 @@ class Electorate { // eslint-disable-line no-unused-vars
       this.allMyPartyVotes.set(currentParty.name, currentPartyVotes)
       this.myElection.addVotes(currentPartyVotes)
       currentParty.addVotes(currentPartyVotes)
+      if (VERBOSE) {
+        console.log(`Adding ${currentPartyVotes} votes to ${currentParty}, giving a new total of ${currentParty.totalVotes}`)
+      }
     }
     return this.allMyPartyVotes
   }

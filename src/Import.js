@@ -84,18 +84,31 @@ class Import { // eslint-disable-line no-unused-vars
     if (validFileTest.test(theHeader)) {
       let validPartyString = lineData.shift()
       let validPartyList = validPartyString.split(',')
-      validPartyList.shift() // first section just says 'Electorate', not needed for check
-      // Make a compare this array to the elections array of parties function
-      lineData.pop() // last line is blank
-      for (let aLine of lineData) {
-        let voteData = aLine.split(',')
-        voteData.pop() // last item in array will be the total number of votes, which we don't want to keep
-        let electorateName = voteData.shift()
-        let anElectorate = theElection.findElectorate(electorateName)
-        if (!anElectorate) {
-          anElectorate = theElection.addElectorate(electorateName)
+      validPartyList = validPartyList.slice(1, validPartyList.length - 3) // the first element just says 'Electorate' and the last 3 are non-party headers
+      // Check that list of parties in the provided data matches the list of parties in the Election.
+      if (theElection.comparePartyList(validPartyList)) {
+        lineData.splice(-3, 3) // Remove the last three lines - Maori Electorate Totals, Overall Totals, and a blank line.
+        lineData.splice(64, 1) // Remove the General Electorate Totals. TO DO: replace this with a non hardcoded variable that is the result of finding the index of the correct line
+        for (let aLine of lineData) {
+          let voteData = aLine.split(',')
+          voteData.pop() // last item in array will be the total number of votes, which we don't want to keep
+          voteData.splice(-2, 1)
+          let electorateName = voteData.shift()
+          let anElectorate = theElection.findElectorate(electorateName)
+          if (!anElectorate) {
+            anElectorate = theElection.addElectorate(electorateName)
+          }
+          let voteDataInts = []
+          for (let item of voteData) {
+            voteDataInts.push(parseInt(item, 10))
+          }
+          anElectorate.addPartyVotes(...voteDataInts)
+          if (VERBOSE) {
+            console.log(theElection.totalVotes)
+          }
         }
-        anElectorate.addPartyVotes(...voteData)
+      } else {
+        alert('Party Data did not match Election Party List, data import unsuccessful')
       }
     }
   }

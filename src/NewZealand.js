@@ -8,7 +8,7 @@ corrected to conform to standardJS 9/11/2017 */
 
 const DEBUG = false // toggle to enable verbose debugging logs to console
 const TESTER = true
-const VERBOSE = false // toggle to enable verbose debugging logs to console
+const VERBOSE = true // toggle to enable verbose debugging logs to console
 
 
 class NewZealand { // eslint-disable-line no-unused-vars
