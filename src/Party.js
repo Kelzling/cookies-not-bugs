@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 9/11/2017
+corrected to conform to standardJS 30/03/2018
 */
 
 /* global Candidate DEBUG */
@@ -69,10 +69,10 @@ class Party { // eslint-disable-line no-unused-vars
     return this.allMyElectorateMPs.length
   }
 
-  getName() {
+  getName () {
     return this.name
   }
-  
+
   addSeats (newSeats) {
     // takes the number of allocated seats from election.allocateSeats() and stores it.
     // More processing will be required here later

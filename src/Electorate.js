@@ -1,8 +1,10 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 9/11/2017
+corrected to conform to standardJS 30/03/2018
 */
+
+/* global VERBOSE */
 
 class Electorate { // eslint-disable-line no-unused-vars
 // Class to store information about an Electorate.

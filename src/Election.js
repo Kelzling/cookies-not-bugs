@@ -1,10 +1,10 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 9/03/2018
+corrected to conform to standardJS 30/03/2018
 */
 
-/* global Party, View, Electorate DEBUG */
+/* global Party, View, Electorate DEBUG VERBOSE */
 
 class Election { // eslint-disable-line no-unused-vars
 // Class for handling elections
@@ -104,7 +104,6 @@ class Election { // eslint-disable-line no-unused-vars
       totalVotesInParliament += party.totalVotes
     }
 
-    
     console.log("For Mike's Marking:")
     console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`) */
 
@@ -112,8 +111,8 @@ class Election { // eslint-disable-line no-unused-vars
 
     return this.allMyParliamentParties
   }
-  
-  comparePartyList(aPartyList) {
+
+  comparePartyList (aPartyList) {
     // function to compare each party name in provided array with the names of the parties in this election's allMyParties array.
     for (let index in aPartyList) {
     // contains a try-catch block to catch TypeErrors generated when the provided list of Party Names contains more elements than the array it is being compared to, and deal with it by returning an error message rather than crashing the entire program.
@@ -122,6 +121,7 @@ class Election { // eslint-disable-line no-unused-vars
         let thisParty = this.allMyParties[index].getName()
         let otherParty = aPartyList[index].toUpperCase()
         if (thisParty !== otherParty) {
+        // if the names don't match, comparison has failed, so return false
           if (VERBOSE) {
             console.log(`Error: ${otherParty} at index ${index} did not match ${thisParty}`)
           }
@@ -130,6 +130,7 @@ class Election { // eslint-disable-line no-unused-vars
       } catch (error) {
         if (error instanceof TypeError) {
         // only dealing with TypeErrors that would be generated when trying to call .getName() on a non-existent Party object
+        // if this error happens, comparison has failed, so return false
           if (VERBOSE) {
             console.log(`Error: Provided List of Parties longer than Election's List of Parties`)
           }

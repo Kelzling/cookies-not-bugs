@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 March 2018
 All Rights Reserved
-corrected to conform to standardJS 15/03/2018 */
+corrected to conform to standardJS 30/03/2018 */
 
 /* global VERBOSE, theElection, alert, FileReader */
 
@@ -75,7 +75,7 @@ class Import { // eslint-disable-line no-unused-vars
       alert('Data not compatible, please choose another file.')
     }
   }
-  
+
   static populateVotesByElectorate (theFile) {
     // takes data from .csv file and processes it to be passed to Electorate and Party objects
     let validFileTest = new RegExp(/^Votes for Registered Parties/)
@@ -87,17 +87,21 @@ class Import { // eslint-disable-line no-unused-vars
       validPartyList = validPartyList.slice(1, validPartyList.length - 3) // the first element just says 'Electorate' and the last 3 are non-party headers
       // Check that list of parties in the provided data matches the list of parties in the Election.
       if (theElection.comparePartyList(validPartyList)) {
+        let genElecTotalsIndex = lineData.findIndex(line => line.includes('General Electorate Totals'))
         lineData.splice(-3, 3) // Remove the last three lines - Maori Electorate Totals, Overall Totals, and a blank line.
-        lineData.splice(64, 1) // Remove the General Electorate Totals. TO DO: replace this with a non hardcoded variable that is the result of finding the index of the correct line
+        lineData.splice(genElecTotalsIndex, 1) // Remove the General Electorate Totals.
         for (let aLine of lineData) {
           let voteData = aLine.split(',')
-          voteData.pop() // last item in array will be the total number of votes, which we don't want to keep
+          // remove total number of votes, and total number of valid votes per electorate from the array
+          voteData.pop()
           voteData.splice(-2, 1)
+          // find or make an electorate from the name at the start of the line
           let electorateName = voteData.shift()
           let anElectorate = theElection.findElectorate(electorateName)
           if (!anElectorate) {
             anElectorate = theElection.addElectorate(electorateName)
           }
+          // convert all of the vote numbers from strings to ints so they can be added together, then pass to add votes function
           let voteDataInts = []
           for (let item of voteData) {
             voteDataInts.push(parseInt(item, 10))
@@ -108,6 +112,7 @@ class Import { // eslint-disable-line no-unused-vars
           }
         }
       } else {
+        // Inform the user of an error if comparison function returned false. Note: Error details will be shown with VERBOSE logging turned on.
         alert('Party Data did not match Election Party List, data import unsuccessful')
       }
     }
