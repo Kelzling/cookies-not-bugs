@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 March 2018
 All Rights Reserved
-corrected to conform to standardJS 30/03/2018 */
+corrected to conform to standardJS 1/04/2018 */
 
 /* global VERBOSE, theElection, alert, FileReader */
 
@@ -147,7 +147,29 @@ class Import { // eslint-disable-line no-unused-vars
     }
   }
 
-  static fileChangeHandler (event) {
+  static fileUploadHandler (event) {
+    // function to handle the uploading of multiple files once they have been selected and ensuring they are imported in the correct order
+    // Store the files in a variable
+    let filesList = event.target.files
+    // iterate over the array of files
+    for (let aFile of filesList) {
+      // Set up FileReader
+      let reader = new FileReader()
+      reader.onload = Import.selectInputFormat
+      // Validate File Type
+      let fileValidator = new RegExp(/.csv$/i)
+      if (!fileValidator.test(aFile.name)) {
+        alert('Wrong File Type! Please Upload a .CSV file instead.')
+        return false // is this necessary? I don't remember why I put it here tbh
+      }
+      // Read file in as Text
+      reader.readAsText(aFile)
+    }
+  }
+
+  // Old code for handling of a single file, deprecated
+
+  /* static fileChangeHandler (event) {
     // initial change event handler once file has been selected. Creates the FileReader object and directs it to the correct function
     let reader = new FileReader()
     reader.onload = Import.selectInputFormat
@@ -156,21 +178,11 @@ class Import { // eslint-disable-line no-unused-vars
     let theFile = event.target.files[0]
 
     // Had to check if the file was a .CSV before the program finishes reading it as text, otherwise we can't access it's .name property.
-    try {
-      if (!theFile.name.includes('.csv')) {
-        throw new Error('Wrong File Type')
-      }
-    } catch (err) {
-      if (err.message.includes('Wrong File')) {
-        alert('Wrong File Type! Please Upload a .CSV file instead.')
-        return false
-      } else {
-        throw err
-      }
+    if (!theFile.name.includes('.csv')) {
+      alert('Wrong File Type! Please Upload a .CSV file instead.')
+      return false // is this necessary? I don't remember why I put it here tbh
     }
     // we will only be allowing one file to be selected at this stage
     reader.readAsText(theFile)
-  }
+  } */
 }
-
-// class FileError extends Error {} // Do something with this at some point to throw slightly more useful errors

@@ -49,13 +49,12 @@ var testElectorate = theElection.addElectorate('Auckland Central', 42)
   ibxFile.setAttribute("type", "file");
   // set the id fo the HTML element to "inputFile"
   ibxFile.setAttribute("id", "inputFile");
-  // only allow one file to be selected so this is currently commented out
-  // ibxFile.setAttribute("multiple", "multiple");
+  ibxFile.setAttribute("multiple", "multiple");
     
   // append the ibxFile element to the body of this HTML page
   document.body.appendChild(ibxFile);
       
-  document.getElementById("inputFile").addEventListener('change', Import.fileChangeHandler);
+  document.getElementById("inputFile").addEventListener('change', Import.fileUploadHandler);
 </script>
 </body>
 </html>
