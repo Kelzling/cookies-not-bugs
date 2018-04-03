@@ -26,13 +26,13 @@ class View { // eslint-disable-line no-unused-vars
     return '.<br>'
   }
 
-  static clearMultiple (...idList) {
+  static clearMultiple (...idList) { // depreciated
     for (let item of idList) {
       this.clear(item)
     }
   }
 
-  static clear (elementId = 'default') {
+  static clear (elementId = 'default') { // depreciated
     // document.body.style.fontFamily = 'Courier New'
     document.getElementById(elementId).innerHTML = ''
   }

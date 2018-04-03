@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Render Testing</title>
+	<link rel="stylesheet" href="./css/stylesheet.css">
+  <script src="src/Render.js"></script>
+  <script src="src/NewZealand.js"></script>
+</head>
+<body>
+
+<button onclick="test1()">test1</button>
+<button onclick='test2()'>test2</button>
+<button onclick='test3()'>test3</button>
+<button onclick='test4()'>test4</button>
+<button onclick='test5()'>test5</button>
+<button onclick='test6()'>test6</button>
+<button onclick='clearTests()'>Clear Tests</button>
+
+<script>
+const myRender = new Render()
+
+function test1() {
+  myRender.makeBttn('test1', 'Clear test 1', 'test1ClearButton', 'test1ClearButton()')
+}
+  
+function test1ClearButton() {
+  myRender.clearByID('test1')
+}
+  
+function test2() {
+  myRender.makeSelect('test2', 'test2Select', ['a', 'b', 'c'])
+
+}
+
+function test3() {
+  myRender.makeDiv('body', 'test3', 'tests')
+  myRender.makeDiv('test3', 'test3.1')
+
+}
+
+function test4() {
+  myRender.makeHeader('test4', 1, 'Header 1', 'Header 1')
+  myRender.makeHeader('test4', 2, 'Header 2', 'Header 2')
+  myRender.makeHeader('test4', 3, 'Header 3', 'Header 3')
+  // myRender.makeHeader('test4', 5, 'Header 5')
+}
+
+function test5() {
+  myRender.makeDiv('body', 'test5', 'tests')
+  myRender.makeParagraph('test5', 'test5P1')
+  myRender.writeToParagraph('test5P1', 'Test five paragraph content!')
+}
+
+function test6() {
+  myRender.makeDiv('body', 'test6', 'tests')
+  myRender.makeParagraph('test6', 'test6P1')
+  myRender.writeToParagraph('test6P1', 'Test six paragraph')
+  myRender.makeBreak('test6P1')
+  myRender.writeToParagraph('test6P1', 'Test six paragraph continues')
+
+}
+
+
+function clearTests() {
+  myRender.clearByClass('tests')
+}
+
+</script>
+
+
+<div id='test1', class='tests'>
+</div>
+
+
+<div id='test2', class='tests'>
+</div>
+
+<div id='test4', class='tests'></div>
+
+
+</body>
+</html>
