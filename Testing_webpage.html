@@ -17,6 +17,7 @@
 <button onclick='test4()'>test4</button>
 <button onclick='test5()'>test5</button>
 <button onclick='test6()'>test6</button>
+<button onclick='test7()'>test7</button>
 <button onclick='clearTests()'>Clear Tests</button>
 
 <script>
@@ -62,6 +63,17 @@ function test6() {
   myRender.makeBreak('test6P1')
   myRender.writeToParagraph('test6P1', 'Test six paragraph continues')
 
+}
+
+function yay(){
+  alert('Files added! Yay!')
+}
+
+function test7() {
+  myRender.makeDiv('body', 'test7', 'tests')
+  myRender.makeLabel('test7', 'test7Label', 'Input files here ')
+  myRender.makeFileInput('test7', 'test7Input')
+  myRender.bindOnChange('test7Input', 'yay')
 }
 
 
