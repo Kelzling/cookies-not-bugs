@@ -142,6 +142,17 @@ class Render{
     theParagraph.innerHTML += writeStr
   }
   
+  makeLabel(myParent, id, newText, className = undefined) {
+    let theLabel = document.createElement('label')
+    let labelText = document.createTextNode(newText)
+    theLabel.appendChild(labelText)
+    theLabel.setAttribute('id', id)
+    theLabel.setAttribute('class', className)
+    let theParent = this.getParent(myParent)
+    theParent.appendChild(theLabel)
+    
+  }
+  
   makeBreak(myParent) {
     let theParent = this.getParent(myParent)
     let newBreak = document.createElement('br')
