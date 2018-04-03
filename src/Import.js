@@ -6,13 +6,13 @@ corrected to conform to standardJS 1/04/2018 */
 /* global VERBOSE, theElection, alert, FileReader */
 
 class Import { // eslint-disable-line no-unused-vars
-  static populateParties (aFile) {
+  static populateParties (theFile) {
     // function to take csv data and output it as arrays that can be fed to Election.addParty and Party.addListCandidates
     console.log('file has loaded')
 
     // Split the initial file into an array where each element is the data for one party. The RegEx uses a Look Ahead in order to only match a new line where the next line starts with a Letter (all candidates start with numbers) without .split consuming the first letter of the party name.
     let splitDelimiter = new RegExp('\r?\n(?=[a-z])', 'i') // eslint-disable-line no-control-regex
-    let splitParties = aFile.split(splitDelimiter)
+    let splitParties = theFile.split(splitDelimiter)
     if (VERBOSE) {
       console.log(splitParties)
     }
@@ -53,8 +53,8 @@ class Import { // eslint-disable-line no-unused-vars
     }
   }
 
-  static populateElectorateWinners (aFile) {
-    let fileLines = aFile.split(/\n/)
+  static populateElectorateWinners (theFile) {
+    let fileLines = theFile.split(/\n/)
     let validFileTest = new RegExp(/^Winning Electorate Candidate Votes/)
     if (validFileTest.test(fileLines[0])) {
       fileLines = fileLines.slice(2, -1) // Removing the first two lines as they contain header data, not data to be imported
