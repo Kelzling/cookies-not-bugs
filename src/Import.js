@@ -1,7 +1,7 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 March 2018
 All Rights Reserved
-corrected to conform to standardJS 1/04/2018 */
+corrected to conform to standardJS 5/04/2018 */
 
 /* global VERBOSE, theElection, alert, FileReader */
 
@@ -13,7 +13,7 @@ class Import { // eslint-disable-line no-unused-vars
     return quotelessString
   }
 
-  static populateParties (theFile/*, theElection*/) {
+  static populateParties (theFile/*, theElection */) {
     // function to take csv data and output it as arrays that can be fed to Election.addParty and Party.addListCandidates
     console.log('file has loaded')
 
@@ -65,7 +65,7 @@ class Import { // eslint-disable-line no-unused-vars
     }
   }
 
-  static populateElectorateWinners (theFile/*, theElection*/) {
+  static populateElectorateWinners (theFile/*, theElection */) {
     let fileLines = theFile.split(/\n/)
     let validFileTest = new RegExp(/^Winning Electorate Candidate Votes/)
     if (validFileTest.test(fileLines[0])) {
@@ -95,7 +95,7 @@ class Import { // eslint-disable-line no-unused-vars
     }
   }
 
-  static populateVotesByElectorate (theFile/*, theElection*/) {
+  static populateVotesByElectorate (theFile/*, theElection */) {
     // takes data from .csv file and processes it to be passed to Electorate and Party objects
     let validFileTest = new RegExp(/^Votes for Registered Parties/)
     let lineData = theFile.split(/\r?\n/)
@@ -183,13 +183,13 @@ class Import { // eslint-disable-line no-unused-vars
       alert('Data not recognised. Please upload a valid file.') // throwing tantrum
     }
   }
-  
+
   static fileHandler (event) { // this probably needs renaming /* to become theFile, theElection */
     let theFile = event.target.result
     // strip quotes from the file
     let quotelessFile = Import.stripQuotes(theFile)
     // pass file to selectImportFormat
-    Import.selectInputFormat(quotelessFile/*, theElection*/)
+    Import.selectInputFormat(quotelessFile/*, theElection */)
     // upon control return, check if election is fully populated yet (function call to Election)
     // theElection.checkData() // commented since function doesn't exist yet
     // if it is, call a method in Render that tells it the import is finished
