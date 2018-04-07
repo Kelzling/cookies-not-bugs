@@ -29,9 +29,8 @@ class Import { // eslint-disable-line no-unused-vars
       console.log(validFileTest)
       console.log(validFileTest.test(splitParties[0]))
     }
-    if (validFileTest.test(splitParties[0])) { //   (splitParties[0].includes(/Party Lists.*Registered Parties/))  old version
-      // remove first line
-      splitParties.shift()
+    let theHeader = splitParties.shift()
+    if (validFileTest.test(theHeader)) { //   (splitParties[0].includes(/Party Lists.*Registered Parties/))  old version
       for (let aParty of splitParties) {
         // Split each party into its own array of individual lines
         let splitData = aParty.split(/\r?\n/) // Need to consume the carriage return as well as the newline character if it exists, as otherwise the name will not match
@@ -60,6 +59,12 @@ class Import { // eslint-disable-line no-unused-vars
       }
       // Ensure the array of Party objects is still sorted alphabetically for later data storage
       theElection.sortParties()
+      // Inform the Election that the function has completed
+      if (theHeader.includes('Unsuccessful')) {
+        theElection.updateProgress('Unsuccessful Parties', true)
+      } else {
+        theElection.updateProgress('Successful Parties', true)
+      }
     } else {
       alert('Data not compatible, please choose another file.')
     }
@@ -90,6 +95,8 @@ class Import { // eslint-disable-line no-unused-vars
           // in future - call Import Failed method in Render?
         }
       }
+      // Inform the Election that the function has completed
+      theElection.updateProgress('Electorate Winners', true)
     } else {
       alert('Data not compatible, please choose another file.')
     }
@@ -148,6 +155,8 @@ class Import { // eslint-disable-line no-unused-vars
             console.log(theElection.totalVotes)
           }
         }
+        // Inform the Election that the function has completed
+        theElection.updateProgress('Party Votes by Electorate', true)
       } else {
         // Inform the user of an error if comparison function returned false. Note: Error details will be shown with VERBOSE logging turned on.
         alert('Party Data did not match Election Party List, data import unsuccessful')
@@ -191,7 +200,8 @@ class Import { // eslint-disable-line no-unused-vars
     // pass file to selectImportFormat
     Import.selectInputFormat(quotelessFile/*, theElection */)
     // upon control return, check if election is fully populated yet (function call to Election)
-    // theElection.checkData() // commented since function doesn't exist yet
+    console.log(theElection.checkProgress())
+    // above call will be used to interface with Render, so console logging to confirm functionality for now.
     // if it is, call a method in Render that tells it the import is finished
     // integration with Render class not yet done
   }

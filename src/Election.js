@@ -16,6 +16,10 @@ class Election { // eslint-disable-line no-unused-vars
     this.allMyElectorates = []
     this.seatsInParliament = 120
     this.allMyParliamentParties = []
+    this.loadedData = new Map([['Successful Parties', false],
+                                ['Unsuccessful Parties', false],
+                                ['Electorate Winners', false],
+                                ['Party Votes by Electorate', false]])
   }
 
   addParty (newPartyName) {
@@ -299,6 +303,28 @@ class Election { // eslint-disable-line no-unused-vars
     }
 
     return true
+  }
+
+  updateProgress (dataType, progress) {
+    this.loadedData.set(dataType, progress)
+  }
+
+  checkProgress (dataType = 'All') {
+    // default use of this function is to check if all data has finished being imported, but it can also be used to check both Parties types, or one specific type
+    if (dataType === 'All') {
+      let values = []
+      this.loadedData.forEach((value, key) => values.push(value))
+      if (values.includes(false)) {
+        return false
+      } else {
+        return true
+      }
+    } else if (dataType === 'Parties') {
+      // uses a ternary operator to return true only if both statements are true                                                // Not unneeded due to nested checks
+      return this.loadedData.get('Successful Parties') ? (this.loadedData.get('Unsuccessful Parties') ? true : false) : false // eslint-disable-line no-unneeded-ternary
+    } else {
+      return this.loadedData.get(dataType)
+    }
   }
 
   getElectorateMap () {
