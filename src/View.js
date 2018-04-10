@@ -1,6 +1,6 @@
 /* built by Thomas Baines and Kelsey Vavasour
 Forked from code provided by Mike Lance
-Corrected to conform to standard JS 07/03/2018 */
+Corrected to conform to standard JS 11/04/2018 */
 
 /* global DEBUG VERBOSE */
 
@@ -78,10 +78,10 @@ class View { // eslint-disable-line no-unused-vars
   }
 
   static renderElection (anElection, column) {
-    let upperTitle = `column${column}Title` // this needs to be commented out for new dynamic
+    // let upperTitle = `column${column}Title` // this needs to be commented out for new dynamic
     let innerTitle = `column${column}MainTitle`
     let innerBody = `column${column}Main`
-    this.add(anElection, upperTitle) // this needs to be commented out for new dynamic
+    // this.add(anElection, upperTitle) // this needs to be commented out for new dynamic
     this.add(anElection, innerTitle)
     for (let aParty of anElection.allMyParliamentParties) {
       this.renderParty(aParty, innerBody)
@@ -156,6 +156,11 @@ class View { // eslint-disable-line no-unused-vars
     }
     renderList.push(this.NEWLINE())
     this.add(renderList, target)
+  }
+
+  static renderComparisons (aCountry, year1, year2) {
+    this.renderElectorateMPComparisons(aCountry, year1, year2)
+    this.renderElectoratePartyVoteComparisons(aCountry.compareElectoratePartyVote(year1, year2))
   }
 
   static renderCountry (aCountry, year1, year2) {

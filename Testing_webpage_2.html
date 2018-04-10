@@ -6,15 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>Render Testing</title>
 	<link rel="stylesheet" href="./css/stylesheet.css">
-  <script src="src/Render.js"></script>
+  <script src="src/View.js"></script>
+  <script src="src/Candidate.js"></script>
+  <script src="src/Party.js"></script>
+  <script src="src/Electorate.js"></script>
+  <script src="src/Election.js"></script>
   <script src="src/NewZealand.js"></script>
-  <script>
-    function documentLoaded() {
-      const myRender = new Render()
-      myRender.buildPage()
-    }
-  </script>
+  <script src="src/Controller2014.js"></script>
+  <script src="src/Controller2017.js"></script>
+  <script src="src/mainController.js"></script>
+  <script src="src/Render.js"></script>
 </head>
-<body onload='documentLoaded()'>
+<body>
+
+<script>
+  var myRender = new Render()
+  myRender.buildPage()
+  
+</script>
 </body>
 </html>
