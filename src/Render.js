@@ -312,7 +312,7 @@ class Render { // eslint-disable-line no-unused-vars
     this.makeDiv('comparisons', 'comparisonsUpper')
     this.makeHeader('comparisonsUpper', 3, 'Run Comparisons    ')
     this.insertNonBreakingSpace('comparisonsUpper')
-    this.makeBttn('comparisonsUpper', 'Go', 'comparisonsButton', false, 'goBttn', true)
+    this.makeBttn('comparisonsUpper', 'Go', 'comparisonsButton', 'myRender.compareGo()', 'goBttn', true)
 
     this.makeDiv('comparisons', 'comparisonsInner', 'container')
     this.makeDiv('comparisonsInner', 'electorateMPParty', 'innerBlock')
