@@ -200,6 +200,15 @@ class Import { // eslint-disable-line no-unused-vars
     // pass file to selectImportFormat
     Import.selectInputFormat(quotelessFile/*, theElection */)
     // upon control return, check if election is fully populated yet (function call to Election)
+    if (theElection.checkProgress()) {
+      console.log('Call to Render')
+    } else if (theElection.checkProgress('Parties')) {
+      if (theElection.checkProgress('Electorate Winners') || theElection.checkProgress('Party Votes by Electorate')) {
+        console.log("Don't call to Render")
+      } else {
+        console.log('Call to Render')
+      }
+    }
     console.log(theElection.checkProgress())
     // above call will be used to interface with Render, so console logging to confirm functionality for now.
     // if it is, call a method in Render that tells it the import is finished
@@ -210,19 +219,25 @@ class Import { // eslint-disable-line no-unused-vars
     // function to handle the uploading of multiple files once they have been selected and ensuring they are imported in the correct order
     // Store the files in a variable
     let filesList = event.target.files
-    // iterate over the array of files
-    for (let aFile of filesList) {
-      // Set up FileReader
-      let reader = new FileReader()
-      reader.onload = Import.fileHandler
-      // Validate File Type
-      let fileValidator = new RegExp(/.csv$/i)
-      if (!fileValidator.test(aFile.name)) {
-        alert('Wrong File Type! Please Upload a .CSV file instead.')
-        return false // is this necessary? I don't remember why I put it here tbh
+    if (filesList.length !== 2) {
+    // check the amount of files because uploading them all at once causes problems
+      alert('Please only upload two files at once.')
+    } else {
+      // keep track of whether some data had already been uploaded or not
+      // iterate over the array of files
+      for (let aFile of filesList) {
+        // Set up FileReader
+        let reader = new FileReader()
+        reader.onload = Import.fileHandler
+        // Validate File Type
+        let fileValidator = new RegExp(/.csv$/i)
+        if (!fileValidator.test(aFile.name)) {
+          alert('Wrong File Type! Please Upload a .CSV file instead.')
+          return false // is this necessary? I don't remember why I put it here tbh
+        }
+        // Read file in as Text
+        reader.readAsText(aFile)
       }
-      // Read file in as Text
-      reader.readAsText(aFile)
     }
   }
 
