@@ -9,6 +9,8 @@ corrected to conform to standardJS 3/04/2018
 class Render { // eslint-disable-line no-unused-vars
   constructor () {
     this.myNewZealand = new NewZealand()
+    this.electionOptions = [2014, 2017]
+    this.testMode = true
     // document.body.innerHTML = '' // disabled for testing
   }
 
@@ -163,9 +165,79 @@ class Render { // eslint-disable-line no-unused-vars
     let newBreak = document.createElement('br')
     theParent.appendChild(newBreak)
   }
+  
+  insertNonBreakingSpace(myParent) {
+    let theParent = this.getParent(myParent)
+    theParent.innerHTML += '&nbsp'
+    
+  }
 
-  bindOnChange (id, callTo) {
+  bindOnChange (id, callTo) { // this may or may not work - uncomfirmed
     let theElement = this.find(id)
     theElement.addEventListener('change', callTo)
+  }
+  
+  
+  
+  disableGo() {
+    goButtons = document.getElementsByClassName('gobttn')
+    for (let aButton of goButtons) {
+      aButton.setAttribute('disabled', 'true')
+    }
+  }
+  
+  buildPage() { // procedural script to build the page
+    
+    // create inital div structure with <br> elements where needed
+    this.makeHeader('body', 1, 'Election Data Viewer', 'Title')
+    this.makeDiv('body', 'upperDisplay', 'container')
+    this.makeBreak('body')
+    this.makeDiv('body', 'years', 'container')
+    this.makeBreak('body')
+    this.makeDiv('body', 'comparisons', 'container')
+    this.makeBreak('body')
+    this.makeBreak('body')
+    this.makeDiv('body', 'oldoutput')
+    
+    // insert values into upperDisplay
+    this.makeDiv('upperDisplay', 'column1Header', 'innerBlock')
+    this.makeLabel('column1Header', 'column1SelectLabel', 'Choose Election: ', 'selectLabel')
+    this.makeSelect('column1Header', 'column1Select', this.electionOptions, 'selector')
+    this.makeBttn('column1Header', 'Go', 'Column1GO', false, 'goBttn')
+    
+    this.makeDiv('upperDisplay', 'column2Header', 'innerBlock')
+    this.makeLabel('column2Header', 'column2SelectLabel', 'Choose Election: ', 'selectLabel')
+    this.makeSelect('column2Header', 'column2Select', this.electionOptions, 'selector')
+    this.makeBttn('column2Header', 'Go', 'Column2GO', false, 'goBttn')
+    
+    // insert values into years
+    this.makeDiv('years', 'column1', 'innerBlock')
+    this.makeHeader('column1' , 3, '', 'col1MainTitle')
+    this.makeDiv('column1', 'column1Data', 'data')
+    
+    this.makeDiv('years', 'column2', 'innerBlock')
+    this.makeHeader('column2', 3, '', 'col2MainTitle')
+    this.makeDiv('column2', 'column2Data', 'data')
+    
+    // create info in comparisons
+    this.makeDiv('comparisons', 'comparisonsUpper')
+    this.makeHeader('comparisonsUpper', 3, 'Run Comparisons    ')
+    this.insertNonBreakingSpace('comparisonsUpper')
+    this.makeBttn('comparisonsUpper', 'Go', 'ComparisonsButton', false, 'goBttn')
+    
+    this.makeDiv('comparisons', 'comparisonsInner', 'container')
+    this.makeDiv('comparisonsInner', 'electorateMPParty', 'innerBlock')
+    this.makeBreak('comparisonsInner')
+    this.makeDiv('comparisonsInner', 'partyVoteChanges', 'innerBlock' )
+    
+    
+    
+    // testing suite
+    if (this.testMode) {
+      this.makeDiv('body', 'tests')
+      this.makeHeader('tests', 2, 'Testing buttons:')
+      this.makeBttn('tests', 'Disable go buttons', '', 'myRender.disableGo')
+    }
+    
   }
 }

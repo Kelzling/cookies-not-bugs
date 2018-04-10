@@ -77,11 +77,11 @@ class View { // eslint-disable-line no-unused-vars
     this.out(outString, target) // push the storage variable into the HTML
   }
 
-  static renderElection (anElection, index) {
-    let upperTitle = `year${index}Title`
-    let innerTitle = `year${index}MainTitle`
-    let innerBody = `year${index}Main`
-    this.add(anElection, upperTitle)
+  static renderElection (anElection, column) {
+    let upperTitle = `column${column}Title` // this needs to be commented out for new dynamic
+    let innerTitle = `column${column}MainTitle`
+    let innerBody = `column${column}Main`
+    this.add(anElection, upperTitle) // this needs to be commented out for new dynamic
     this.add(anElection, innerTitle)
     for (let aParty of anElection.allMyParliamentParties) {
       this.renderParty(aParty, innerBody)
