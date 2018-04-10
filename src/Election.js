@@ -1,10 +1,10 @@
 /* Coded by Thomas Baines and Kelsey Vavasour
 August 2017
 All Rights Reserved
-corrected to conform to standardJS 07/03/2018
+corrected to conform to standardJS 30/03/2018
 */
 
-/* global Party, View, Electorate, DEBUG, VERBOSE */
+/* global Party, View, Electorate DEBUG VERBOSE */
 
 class Election { // eslint-disable-line no-unused-vars
 // Class for handling elections
@@ -16,6 +16,10 @@ class Election { // eslint-disable-line no-unused-vars
     this.allMyElectorates = []
     this.seatsInParliament = 120
     this.allMyParliamentParties = []
+    this.loadedData = new Map([['Successful Parties', false],
+                                ['Unsuccessful Parties', false],
+                                ['Electorate Winners', false],
+                                ['Party Votes by Electorate', false]])
   }
 
   addParty (newPartyName) {
@@ -25,6 +29,18 @@ class Election { // eslint-disable-line no-unused-vars
     let newParty = new Party(capsPartyName, this)
     this.allMyParties.push(newParty)
     return newParty
+  }
+
+  sortParties () {
+    this.allMyParties.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1
+      } else if (a.name > b.name) {
+        return 1
+      } else {
+        return 0
+      }
+    })
   }
 
   addElectorate (newElectorateName) {
@@ -86,19 +102,50 @@ class Election { // eslint-disable-line no-unused-vars
       }
     }
 
-    // for mike
+    /* // for mike - Depreciated
     let totalVotesInParliament = 0
     for (let party of this.allMyParliamentParties) {
       totalVotesInParliament += party.totalVotes
     }
 
-    if (VERBOSE) {
-      console.log("For Mike's Marking:")
-      console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`)
+    console.log("For Mike's Marking:")
+    console.log(`Total votes for all parties in parliament for ${this.year} are: ${totalVotesInParliament}\n\n`) */
 
     // bit for mike ends
-    }
+
     return this.allMyParliamentParties
+  }
+
+  comparePartyList (aPartyList) {
+    // function to compare each party name in provided array with the names of the parties in this election's allMyParties array.
+    for (let index in aPartyList) {
+    // contains a try-catch block to catch TypeErrors generated when the provided list of Party Names contains more elements than the array it is being compared to, and deal with it by returning an error message rather than crashing the entire program.
+      try {
+      // store names as variables
+        let thisParty = this.allMyParties[index].getName()
+        let otherParty = aPartyList[index].toUpperCase()
+        if (thisParty !== otherParty) {
+        // if the names don't match, comparison has failed, so return false
+          if (VERBOSE) {
+            console.log(`Error: ${otherParty} at index ${index} did not match ${thisParty}`)
+          }
+          return false
+        }
+      } catch (error) {
+        if (error instanceof TypeError) {
+        // only dealing with TypeErrors that would be generated when trying to call .getName() on a non-existent Party object
+        // if this error happens, comparison has failed, so return false
+          if (VERBOSE) {
+            console.log(`Error: Provided List of Parties longer than Election's List of Parties`)
+          }
+          return false
+        } else {
+          throw error
+        }
+      }
+    }
+    // function returns true if it reaches the end of the main flow, but false if it goes down an alternative flow (as this would indicate a mismatch between the two arrays)
+    return true
   }
 
   allocateSeats () {
@@ -258,6 +305,28 @@ class Election { // eslint-disable-line no-unused-vars
     return true
   }
 
+  updateProgress (dataType, progress) {
+    this.loadedData.set(dataType, progress)
+  }
+
+  checkProgress (dataType = 'All') {
+    // default use of this function is to check if all data has finished being imported, but it can also be used to check both Parties types, or one specific type
+    if (dataType === 'All') {
+      let values = []
+      this.loadedData.forEach((value, key) => values.push(value))
+      if (values.includes(false)) {
+        return false
+      } else {
+        return true
+      }
+    } else if (dataType === 'Parties') {
+      // uses a ternary operator to return true only if both statements are true                                                // Not unneeded due to nested checks
+      return this.loadedData.get('Successful Parties') ? (this.loadedData.get('Unsuccessful Parties') ? true : false) : false // eslint-disable-line no-unneeded-ternary
+    } else {
+      return this.loadedData.get(dataType)
+    }
+  }
+
   getElectorateMap () {
     // generates a map where key = electorate name (as a string) and value = party of the candidate who won the electorat (as instance of party)
     let electorateMap = new Map()
@@ -325,6 +394,6 @@ class Election { // eslint-disable-line no-unused-vars
   }
 
   toString () {
-    return this.year
+    return `Election ${this.year}\n`
   }
 }
