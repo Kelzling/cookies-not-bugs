@@ -6,14 +6,18 @@ corrected to conform to standardJS 5/04/2018 */
 /* global VERBOSE, theElection, alert, FileReader */
 
 class Import { // eslint-disable-line no-unused-vars
-  static stripQuotes (aString) {
+  constructor (anElection) {
+    this.theElection = anElection
+  }
+  
+  stripQuotes (aString) {
     // function to remove all quotes from a string
     let allQuotes = new RegExp(/"/g) // matches all instance of "
     let quotelessString = aString.replace(allQuotes, '')
     return quotelessString
   }
 
-  static populateParties (theFile/*, theElection */) {
+  populateParties (theFile) {
     // function to take csv data and output it as arrays that can be fed to Election.addParty and Party.addListCandidates
     console.log('file has loaded')
 
@@ -42,7 +46,7 @@ class Import { // eslint-disable-line no-unused-vars
           splitData.pop()
         }
         // Make a new instance of Party using the name
-        let newParty = theElection.addParty(splitData.shift())
+        let newParty = this.theElection.addParty(splitData.shift())
         // Create an array of Candidate names after stripping the excess data from either side
         let allNewCandidates = []
         for (let aCandidate of splitData) {
@@ -58,19 +62,19 @@ class Import { // eslint-disable-line no-unused-vars
         newParty.addListCandidates(...allNewCandidates)
       }
       // Ensure the array of Party objects is still sorted alphabetically for later data storage
-      theElection.sortParties()
+      this.theElection.sortParties()
       // Inform the Election that the function has completed
       if (theHeader.includes('Unsuccessful')) {
-        theElection.updateProgress('Unsuccessful Parties', true)
+        this.theElection.updateProgress('Unsuccessful Parties', true)
       } else {
-        theElection.updateProgress('Successful Parties', true)
+        this.theElection.updateProgress('Successful Parties', true)
       }
     } else {
       alert('Data not compatible, please choose another file.')
     }
   }
 
-  static populateElectorateWinners (theFile/*, theElection */) {
+  populateElectorateWinners (theFile) {
     let fileLines = theFile.split(/\n/)
     let validFileTest = new RegExp(/^Winning Electorate Candidate Votes/)
     if (validFileTest.test(fileLines[0])) {
@@ -82,12 +86,12 @@ class Import { // eslint-disable-line no-unused-vars
         let candidateName = lineData[1]/* .substring(1, lineData[1].lastIndexOf('"')) // Trimming the quotation marks from around the name  - NO LONGER NECESSARY AS ALL QUOTES ARE NOW TRIMMED FROM THE FILE AT START OF PROCESSING */
         let partyName = lineData[2]
 
-        let anElectorate = theElection.findElectorate(electorateName)
+        let anElectorate = this.theElection.findElectorate(electorateName)
         if (!anElectorate) {
-          anElectorate = theElection.addElectorate(electorateName)
+          anElectorate = this.theElection.addElectorate(electorateName)
         }
         // if Party is missing, data import will fail, so throw a tantrum
-        if (theElection.findParty(partyName)) {
+        if (this.theElection.findParty(partyName)) {
           anElectorate.addWinner(candidateName, partyName)
         } else {
           alert('Necessary Party Data Missing, Upload Failed')
@@ -96,13 +100,13 @@ class Import { // eslint-disable-line no-unused-vars
         }
       }
       // Inform the Election that the function has completed
-      theElection.updateProgress('Electorate Winners', true)
+      this.theElection.updateProgress('Electorate Winners', true)
     } else {
       alert('Data not compatible, please choose another file.')
     }
   }
 
-  static populateVotesByElectorate (theFile/*, theElection */) {
+  populateVotesByElectorate (theFile) {
     // takes data from .csv file and processes it to be passed to Electorate and Party objects
     let validFileTest = new RegExp(/^Votes for Registered Parties/)
     let lineData = theFile.split(/\r?\n/)
@@ -123,7 +127,7 @@ class Import { // eslint-disable-line no-unused-vars
       }
       validPartyList = validPartyList.slice(1, validPartyList.length - extraHeaders) // the first element just says 'Electorate' (or is blank) and the last 2 or 3 are non-party headers
       // Check that list of parties in the provided data matches the list of parties in the Election.
-      if (theElection.comparePartyList(validPartyList)) {
+      if (this.theElection.comparePartyList(validPartyList)) {
         // first remove excess data from lineData array, then process the data
         let genElecTotalsIndex = lineData.findIndex(line => line.includes('General Electorate Totals'))
         lineData.splice(-3, 3) // Remove the last three lines - Maori Electorate Totals, Overall Totals, and a blank line.
@@ -141,9 +145,9 @@ class Import { // eslint-disable-line no-unused-vars
           voteData.splice(-2, 1)
           // find or make an electorate from the name at the start of the line
           let electorateName = voteData.shift()
-          let anElectorate = theElection.findElectorate(electorateName)
+          let anElectorate = this.theElection.findElectorate(electorateName)
           if (!anElectorate) {
-            anElectorate = theElection.addElectorate(electorateName)
+            anElectorate = this.theElection.addElectorate(electorateName)
           }
           // convert all of the vote numbers from strings to ints so they can be added together, then pass to add votes function
           let voteDataInts = []
@@ -152,11 +156,11 @@ class Import { // eslint-disable-line no-unused-vars
           }
           anElectorate.addPartyVotes(...voteDataInts)
           if (VERBOSE) {
-            console.log(theElection.totalVotes)
+            console.log(this.theElection.totalVotes)
           }
         }
         // Inform the Election that the function has completed
-        theElection.updateProgress('Party Votes by Electorate', true)
+        this.theElection.updateProgress('Party Votes by Electorate', true)
       } else {
         // Inform the user of an error if comparison function returned false. Note: Error details will be shown with VERBOSE logging turned on.
         alert('Party Data did not match Election Party List, data import unsuccessful')
@@ -164,7 +168,7 @@ class Import { // eslint-disable-line no-unused-vars
     }
   }
 
-  static selectInputFormat (theFile) { /* to be changed to theFile, theElection */
+  selectInputFormat (theFile) {
     // Function to check header of the uploaded file and run the correct import function
     let validHeaders = ['Party Lists of Successful Registered Parties', 'Party Lists of Unsuccessful Registered Parties', 'Votes for Registered Parties by Electorate', 'Winning Electorate Candidate Votes']
     /* let theFile = event.target.result // Storing the file that has been read as text in a variable for further usage */ // Deprecated
@@ -173,19 +177,19 @@ class Import { // eslint-disable-line no-unused-vars
       switch (theHeader) {
         case validHeaders[0]:
           // Import Successful Parties and their Party Lists
-          Import.populateParties(theFile)
+          this.populateParties(theFile)
           break
         case validHeaders[1]:
           // Import Unsuccessful Parties and their Party Lists
-          Import.populateParties(theFile)
+          this.populateParties(theFile)
           break
         case validHeaders[2]:
           // import Electorates and votes function
-          Import.populateVotesByElectorate(theFile)
+          this.populateVotesByElectorate(theFile)
           break
         case validHeaders[3]:
           // import Electorates and Winning Candidates function
-          Import.populateElectorateWinners(theFile)
+          this.populateElectorateWinners(theFile)
           break
       }
     } else {
@@ -193,32 +197,32 @@ class Import { // eslint-disable-line no-unused-vars
     }
   }
 
-  static fileHandler (event) { // this probably needs renaming /* to become theFile, theElection */
-    let theFile = event.target.result
+  fileHandler (event) { // this probably needs renaming
+    let theFile = event.currentTarget.result
     // strip quotes from the file
-    let quotelessFile = Import.stripQuotes(theFile)
+    let quotelessFile = this.stripQuotes(theFile)
     // pass file to selectImportFormat
-    Import.selectInputFormat(quotelessFile/*, theElection */)
+    this.selectInputFormat(quotelessFile)
     // upon control return, check if election is fully populated yet (function call to Election)
-    if (theElection.checkProgress()) {
+    if (this.theElection.checkProgress()) {
       console.log('Call to Render')
-    } else if (theElection.checkProgress('Parties')) {
-      if (theElection.checkProgress('Electorate Winners') || theElection.checkProgress('Party Votes by Electorate')) {
+    } else if (this.theElection.checkProgress('Parties')) {
+      if (this.theElection.checkProgress('Electorate Winners') || this.theElection.checkProgress('Party Votes by Electorate')) {
         console.log("Don't call to Render")
       } else {
         console.log('Call to Render')
       }
     }
-    console.log(theElection.checkProgress())
+    console.log(this.theElection.checkProgress())
     // above call will be used to interface with Render, so console logging to confirm functionality for now.
     // if it is, call a method in Render that tells it the import is finished
     // integration with Render class not yet done
   }
 
-  static fileUploadHandler (event) { /* to be changed to: filesList, theElection */
+  fileUploadHandler (filesList) { /* to be changed to: filesList, theElection */
     // function to handle the uploading of multiple files once they have been selected and ensuring they are imported in the correct order
     // Store the files in a variable
-    let filesList = event.target.files
+    // let filesList = event.target.files
     if (filesList.length !== 2) {
     // check the amount of files because uploading them all at once causes problems
       alert('Please only upload two files at once.')
@@ -228,7 +232,7 @@ class Import { // eslint-disable-line no-unused-vars
       for (let aFile of filesList) {
         // Set up FileReader
         let reader = new FileReader()
-        reader.onload = Import.fileHandler
+        reader.onload = this.fileHandler
         // Validate File Type
         let fileValidator = new RegExp(/.csv$/i)
         if (!fileValidator.test(aFile.name)) {

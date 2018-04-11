@@ -10,8 +10,9 @@ class Render { // eslint-disable-line no-unused-vars
   constructor () {
     this.myNewZealand = new NewZealand()
     this.electionOptions = [2014, 2017]
-    this.testMode = true
+    this.testMode = false
     this.importing = false
+    this.importElection = undefined
     this.column1Year = undefined
     this.column2Year = undefined
     // document.body.innerHTML = '' // disabled for testing
@@ -218,8 +219,7 @@ class Render { // eslint-disable-line no-unused-vars
     } catch (err) {
       if (err.message === 'Election not found') {
         let theElection = this.myNewZealand.addElection(electionYear) // eslint-disable-line no-unused-vars
-        this.importMode(colNumber)
-        // call import and do stuff
+        this.importMode(colNumber, theElection)
       } else {
         throw err
       }
@@ -227,9 +227,10 @@ class Render { // eslint-disable-line no-unused-vars
     this.displayElection(colNumber, electionYear)
   }
 
-  importMode (colNumber) {
+  importMode (colNumber, theElection) {
     this.disableGo()
     this.importing = true
+    this.importElection = theElection
     let title = `column${colNumber}MainTitle`
     this.find(title).innerHTML = 'Import Mode:'
     let column = `column${colNumber}Data`
@@ -237,7 +238,7 @@ class Render { // eslint-disable-line no-unused-vars
     this.makeParagraph(column, 'importText')
     this.writeToParagraph('importText', 'Please import the Election data two files at a time. First the successful and unsuccessful party lists, followed by the electorate winners and party votes by electorate.')
     this.makeFileInput(column, 'fileLoader')
-    this.makeBttn(column, 'Load', false, 'myRender.callImport()')
+    this.makeBttn(column, 'Load', false, 'myRender.loadButtonGo()')
   }
 
   displayElection (colNumber, electionYear) {
@@ -254,6 +255,12 @@ class Render { // eslint-disable-line no-unused-vars
         this.compareOn()
       }
     }
+  }
+  
+  loadButtonGo() {
+    let theImport = new Import(this.importElection)
+    let filesList = this.find('fileLoader').files
+    theImport.fileUploadHandler(filesList)
   }
 
   column1Go () {
