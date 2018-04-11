@@ -274,6 +274,7 @@ class Render { // eslint-disable-line no-unused-vars
   }
   
   importComplete(dataType, year) {
+    this.find('fileLoader').value = ''
     if (dataType === 'Parties') {
       this.clearByID('importText')
       this.writeToParagraph('importText', 'Parties upload complete. Please load Electorate Winners and Party Vote by Electorate data.')
