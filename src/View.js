@@ -1,6 +1,6 @@
 /* built by Thomas Baines and Kelsey Vavasour
 Forked from code provided by Mike Lance
-Corrected to conform to standard JS 07/03/2018 */
+Corrected to conform to standard JS 11/04/2018 */
 
 /* global DEBUG VERBOSE */
 
@@ -26,13 +26,13 @@ class View { // eslint-disable-line no-unused-vars
     return '.<br>'
   }
 
-  static clearMultiple (...idList) {
+  static clearMultiple (...idList) { // depreciated
     for (let item of idList) {
       this.clear(item)
     }
   }
 
-  static clear (elementId = 'default') {
+  static clear (elementId = 'default') { // depreciated
     // document.body.style.fontFamily = 'Courier New'
     document.getElementById(elementId).innerHTML = ''
   }
@@ -77,16 +77,16 @@ class View { // eslint-disable-line no-unused-vars
     this.out(outString, target) // push the storage variable into the HTML
   }
 
-  static renderElection (anElection, index) {
-    let upperTitle = `year${index}Title`
-    let innerTitle = `year${index}MainTitle`
-    let innerBody = `year${index}Main`
-    this.add(anElection, upperTitle)
+  static renderElection (anElection, column) {
+    // let upperTitle = `column${column}Title` // this needs to be commented out for new dynamic
+    let innerTitle = `column${column}MainTitle`
+    let innerBody = `column${column}Main`
+    // this.add(anElection, upperTitle) // this needs to be commented out for new dynamic
     this.add(anElection, innerTitle)
     for (let aParty of anElection.allMyParliamentParties) {
       this.renderParty(aParty, innerBody)
     }
-    this.out(this.NEWLINE())
+    // this.out(this.NEWLINE()) // depreciated
   }
 
   static renderElectorateMPComparisons (aCountry, year1, year2) {
@@ -132,7 +132,7 @@ class View { // eslint-disable-line no-unused-vars
     // programmer's note: This code is very processor intensive, the view.out calls have a high algorythmic complexity. Possibly investigate storing the values as an out list and pushing them to the view.out in one call.
     let target = 'partyVoteChanges'
     let renderList = []
-    renderList.push(`${this.NEWLINE()}Party Vote Changes, By Electorate:${this.NEWLINE()}`)
+    renderList.push(`Party Vote Changes, By Electorate:${this.NEWLINE()}`)
     let nameValues = ['Labor', 'National', 'Other'] // to avoid hard coding in loop.
     for (let anElectorate of mapVoteData.keys()) {
       if (DEBUG) {
@@ -156,6 +156,11 @@ class View { // eslint-disable-line no-unused-vars
     }
     renderList.push(this.NEWLINE())
     this.add(renderList, target)
+  }
+
+  static renderComparisons (aCountry, year1, year2) {
+    this.renderElectorateMPComparisons(aCountry, year1, year2)
+    this.renderElectoratePartyVoteComparisons(aCountry.compareElectoratePartyVote(year1, year2))
   }
 
   static renderCountry (aCountry, year1, year2) {

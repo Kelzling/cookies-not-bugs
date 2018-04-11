@@ -15,10 +15,14 @@ class Controller { // eslint-disable-line no-unused-vars
     anElection = theCountry.addElection(2017) // create and populate the 2017 election
     theCountry.populateElection(anElection.year)
 
-    if (DEBUG) {
+    if (TESTER) {
       // DEBUGGING PURPOSES ONLY.
-      theCountry.compareElectorateMPParties(2014, 2017)
-      theCountry.compareElectoratePartyVote(2014, 2017)
+      
+      // current working code, is subject to regular and random changes.
+      var test = new Tester(2017)
+      let debugElection = theCountry.findElection(2017)
+      let debugParty = debugElection.findParty('Labour Party')
+      test.compareParty(debugParty)
       // DEBUG CODE ENDS
     }
 

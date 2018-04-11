@@ -48,6 +48,11 @@ h3 {
   display: inline;
 }
 
+.selector {
+  margin-right: 0.3em;
+  
+}
+
 .container {
   border-style: solid;
   border-width: 0.3em;
@@ -59,7 +64,7 @@ h3 {
   flex-wrap: nowrap;
 }
 
-.container * {
+.container *, .containerSoft * {
   flex-grow: 1;
 }
 
@@ -75,10 +80,17 @@ h3 {
   padding-right: 0.2em; */
   margin-left: 0.1em;
   margin-right: 0.1em;
+  width: 50%;
 }
+
 
 #default {
   display: block;
+}
+
+#comparisonsUpper{
+  padding: 0.2em;
+  display: inline-flex;
 }
 
 #comparisons {
