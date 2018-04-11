@@ -9,10 +9,11 @@ corrected to conform to standardJS 11/04/2018
 class Render { // eslint-disable-line no-unused-vars
   constructor () {
     this.myNewZealand = new NewZealand()
-    this.electionOptions = [2008, 2011, 2014, 2017]
+    this.electionOptions = [2005, 2011, 2014, 2017]
     this.testMode = false
     this.importing = false
     this.importElection = undefined
+    this.importColumn = null
     this.column1Year = undefined
     this.column2Year = undefined
     // document.body.innerHTML = '' // disabled for testing
@@ -230,6 +231,7 @@ class Render { // eslint-disable-line no-unused-vars
   importMode (colNumber, theElection) {
     this.disableGo()
     this.importing = true
+    this.importColumn = colNumber
     this.importElection = theElection
     let title = `column${colNumber}MainTitle`
     this.find(title).innerHTML = 'Import Mode:'
@@ -257,12 +259,18 @@ class Render { // eslint-disable-line no-unused-vars
     }
   }
   
-  importComplete(dataType) {
+  importComplete(dataType, year) {
     if (dataType = 'Parties') {
       this.clearByID('importText')
       this.writeToParagraph('importText', 'Parties upload complete. Please load Electorate Winners and Party Vote by Electorate data.')
     } else {
-      // unlock the everything and display the election. Will need to figure out how to tell it which column it's displaying in?
+      this.importing = false // tell render that it's finished importing
+      this.displayElection(this.importColumn, year) // call to render the election in the correct column
+      // clear the in-process variables back to the default states
+      this.importElection = undefined
+      this.importColumn = null
+      this.enableGo()
+      
     }
   }
   

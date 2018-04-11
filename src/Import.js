@@ -206,13 +206,13 @@ class Import { // eslint-disable-line no-unused-vars
     // upon control return, check if election is fully populated yet (function call to Election)
     if (this.theElection.checkProgress()) {
       this.theElection.allocateSeats()
-      myRender.importComplete('All')
+      myRender.importComplete('All', this.theElection.year)
       console.log('Call to Render')
     } else if (this.theElection.checkProgress('Parties')) {
       if (this.theElection.checkProgress('Electorate Winners') || this.theElection.checkProgress('Party Votes by Electorate')) {
         console.log("Don't call to Render")
       } else {
-        myRender.importComplete('Parties')
+        myRender.importComplete('Parties', this.theElection.year)
         console.log('Call to Render')
       }
     }
