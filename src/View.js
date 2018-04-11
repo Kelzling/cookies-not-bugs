@@ -86,7 +86,7 @@ class View { // eslint-disable-line no-unused-vars
     for (let aParty of anElection.allMyParliamentParties) {
       this.renderParty(aParty, innerBody)
     }
-    this.out(this.NEWLINE())
+    // this.out(this.NEWLINE()) // depreciated
   }
 
   static renderElectorateMPComparisons (aCountry, year1, year2) {
@@ -132,7 +132,7 @@ class View { // eslint-disable-line no-unused-vars
     // programmer's note: This code is very processor intensive, the view.out calls have a high algorythmic complexity. Possibly investigate storing the values as an out list and pushing them to the view.out in one call.
     let target = 'partyVoteChanges'
     let renderList = []
-    renderList.push(`${this.NEWLINE()}Party Vote Changes, By Electorate:${this.NEWLINE()}`)
+    renderList.push(`Party Vote Changes, By Electorate:${this.NEWLINE()}`)
     let nameValues = ['Labor', 'National', 'Other'] // to avoid hard coding in loop.
     for (let anElectorate of mapVoteData.keys()) {
       if (DEBUG) {

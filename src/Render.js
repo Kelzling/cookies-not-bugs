@@ -235,18 +235,32 @@ class Render { // eslint-disable-line no-unused-vars
     this.importElection = theElection
     let title = `column${colNumber}MainTitle`
     this.find(title).innerHTML = 'Import Mode:'
-    let column = `column${colNumber}Data`
+    let column = `column${colNumber}Main`
     this.clearByID(column)
     this.makeParagraph(column, 'importText')
     this.writeToParagraph('importText', 'Please import the Election data two files at a time. First load the party lists for both Successful and Unsuccessful Parties.')
     this.makeFileInput(column, 'fileLoader')
     this.makeBttn(column, 'Load', 'loadBttn', 'myRender.loadButtonGo()')
   }
+  
+  displayMode(colNumber) {
+    if (colNumber === 1) {
+      this.clearByID('column1')
+      this.makeHeader('column1', 3, '', 'column1MainTitle')
+      this.makeDiv('column1', 'column1Main', 'data')
+    } else if (colNumber === 2) {
+      this.clearByID('column2')
+      this.makeHeader('column2', 3, '', 'column2MainTitle')
+      this.makeDiv('column2', 'column2Main', 'data')
+    } else {
+      throw new RangeError('Index out of range')
+    }
+  }
 
   displayElection (colNumber, electionYear) {
     if (!this.importing) {
       let title = `column${colNumber}MainTitle`
-      this.clearMultiplebyID(title, `column${colNumber}Data`)
+      this.displayMode(colNumber)
       View.renderElection(this.myNewZealand.findElection(electionYear), colNumber)
       if (colNumber === 1) {
         this.column1Year = electionYear
@@ -260,7 +274,7 @@ class Render { // eslint-disable-line no-unused-vars
   }
   
   importComplete(dataType, year) {
-    if (dataType = 'Parties') {
+    if (dataType === 'Parties') {
       this.clearByID('importText')
       this.writeToParagraph('importText', 'Parties upload complete. Please load Electorate Winners and Party Vote by Electorate data.')
     } else {
@@ -286,7 +300,7 @@ class Render { // eslint-disable-line no-unused-vars
   }
 
   column2Go () {
-    let electionYear = this.find('column1Select').value
+    let electionYear = this.find('column2Select').value
     this.loadElection(2, electionYear)
   }
 
@@ -326,7 +340,7 @@ class Render { // eslint-disable-line no-unused-vars
     // insert values into years
     this.makeDiv('years', 'column1', 'innerBlock')
     this.makeHeader('column1', 3, '', 'column1MainTitle')
-    this.makeDiv('column1', 'column1Data', 'data')
+    this.makeDiv('column1', 'column1Main', 'data')
 
     this.makeDiv('years', 'column2', 'innerBlock')
     this.makeHeader('column2', 3, '', 'column2MainTitle')
@@ -339,7 +353,7 @@ class Render { // eslint-disable-line no-unused-vars
     this.makeBttn('comparisonsUpper', 'Go', 'comparisonsButton', 'myRender.compareGo()', 'goBttn', true)
 
     this.makeDiv('comparisons', 'comparisonsInner', 'container')
-    this.makeDiv('comparisonsInner', 'electorateMPParty', 'innerBlock')
+    this.makeDiv('comparisonsInner', 'electorateMpParty', 'innerBlock')
     this.makeBreak('comparisonsInner')
     this.makeDiv('comparisonsInner', 'partyVoteChanges', 'innerBlock')
 
