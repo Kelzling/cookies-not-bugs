@@ -9,7 +9,7 @@ corrected to conform to standardJS 11/04/2018
 class Render { // eslint-disable-line no-unused-vars
   constructor () {
     this.myNewZealand = new NewZealand()
-    this.electionOptions = [2014, 2017]
+    this.electionOptions = [2008, 2011, 2014, 2017]
     this.testMode = false
     this.importing = false
     this.importElection = undefined
@@ -236,9 +236,9 @@ class Render { // eslint-disable-line no-unused-vars
     let column = `column${colNumber}Data`
     this.clearByID(column)
     this.makeParagraph(column, 'importText')
-    this.writeToParagraph('importText', 'Please import the Election data two files at a time. First the successful and unsuccessful party lists, followed by the electorate winners and party votes by electorate.')
+    this.writeToParagraph('importText', 'Please import the Election data two files at a time. First load the party lists for both Successful and Unsuccessful Parties.')
     this.makeFileInput(column, 'fileLoader')
-    this.makeBttn(column, 'Load', false, 'myRender.loadButtonGo()')
+    this.makeBttn(column, 'Load', 'loadBttn', 'myRender.loadButtonGo()')
   }
 
   displayElection (colNumber, electionYear) {
@@ -254,6 +254,15 @@ class Render { // eslint-disable-line no-unused-vars
       if (this.column2Year !== undefined && this.column1Year !== undefined) {
         this.compareOn()
       }
+    }
+  }
+  
+  importComplete(dataType) {
+    if (dataType = 'Parties') {
+      this.clearByID('importText')
+      this.writeToParagraph('importText', 'Parties upload complete. Please load Electorate Winners and Party Vote by Electorate data.')
+    } else {
+      // unlock the everything and display the election. Will need to figure out how to tell it which column it's displaying in?
     }
   }
   

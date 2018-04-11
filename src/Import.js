@@ -205,11 +205,14 @@ class Import { // eslint-disable-line no-unused-vars
     this.selectInputFormat(quotelessFile)
     // upon control return, check if election is fully populated yet (function call to Election)
     if (this.theElection.checkProgress()) {
+      this.theElection.allocateSeats()
+      myRender.importComplete('All')
       console.log('Call to Render')
     } else if (this.theElection.checkProgress('Parties')) {
       if (this.theElection.checkProgress('Electorate Winners') || this.theElection.checkProgress('Party Votes by Electorate')) {
         console.log("Don't call to Render")
       } else {
+        myRender.importComplete('Parties')
         console.log('Call to Render')
       }
     }
@@ -232,7 +235,8 @@ class Import { // eslint-disable-line no-unused-vars
       for (let aFile of filesList) {
         // Set up FileReader
         let reader = new FileReader()
-        reader.onload = this.fileHandler
+        // had to bind this, otherwise this was referring to the fileReader object, not the Import object. 
+        reader.onload = this.fileHandler.bind(this)
         // Validate File Type
         let fileValidator = new RegExp(/.csv$/i)
         if (!fileValidator.test(aFile.name)) {
