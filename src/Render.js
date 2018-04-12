@@ -4,7 +4,7 @@ All Rights Reserved
 corrected to conform to standardJS 11/04/2018
 */
 
-/* global NewZealand View */
+/* global NewZealand View Import */
 
 class Render { // eslint-disable-line no-unused-vars
   constructor () {
@@ -242,8 +242,8 @@ class Render { // eslint-disable-line no-unused-vars
     this.makeFileInput(column, 'fileLoader')
     this.makeBttn(column, 'Load', 'loadBttn', 'myRender.loadButtonGo()')
   }
-  
-  displayMode(colNumber) {
+
+  displayMode (colNumber) {
     if (colNumber === 1) {
       this.clearByID('column1')
       this.makeHeader('column1', 3, '', 'column1MainTitle')
@@ -259,7 +259,7 @@ class Render { // eslint-disable-line no-unused-vars
 
   displayElection (colNumber, electionYear) {
     if (!this.importing) {
-      let title = `column${colNumber}MainTitle`
+      // let title = column${colNumber}MainTitle
       this.displayMode(colNumber)
       View.renderElection(this.myNewZealand.findElection(electionYear), colNumber)
       if (colNumber === 1) {
@@ -272,8 +272,8 @@ class Render { // eslint-disable-line no-unused-vars
       }
     }
   }
-  
-  importComplete(dataType, year) {
+
+  importComplete (dataType, year) {
     this.find('fileLoader').value = ''
     if (dataType === 'Parties') {
       this.clearByID('importText')
@@ -285,11 +285,10 @@ class Render { // eslint-disable-line no-unused-vars
       this.importElection = undefined
       this.importColumn = null
       this.enableGo()
-      
     }
   }
-  
-  loadButtonGo() {
+
+  loadButtonGo () {
     let theImport = new Import(this.importElection)
     let filesList = this.find('fileLoader').files
     theImport.fileUploadHandler(filesList)
