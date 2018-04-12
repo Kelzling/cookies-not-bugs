@@ -3,13 +3,13 @@ March 2018
 All Rights Reserved
 corrected to conform to standardJS 5/04/2018 */
 
-/* global VERBOSE, theElection, alert, FileReader */
+/* global VERBOSE, alert, FileReader, myRender */
 
 class Import { // eslint-disable-line no-unused-vars
   constructor (anElection) {
     this.theElection = anElection
   }
-  
+
   stripQuotes (aString) {
     // function to remove all quotes from a string
     let allQuotes = new RegExp(/"/g) // matches all instance of "
@@ -235,7 +235,7 @@ class Import { // eslint-disable-line no-unused-vars
       for (let aFile of filesList) {
         // Set up FileReader
         let reader = new FileReader()
-        // had to bind this, otherwise this was referring to the fileReader object, not the Import object. 
+        // had to bind this, otherwise this was referring to the fileReader object, not the Import object.
         reader.onload = this.fileHandler.bind(this)
         // Validate File Type
         let fileValidator = new RegExp(/.csv$/i)
